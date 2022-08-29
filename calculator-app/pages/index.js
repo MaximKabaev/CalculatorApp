@@ -1,6 +1,38 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { TbNumber1, TbNumber2, TbNumber3, TbNumber4, TbNumber5, TbNumber6, TbNumber7, TbNumber8, TbNumber9, TbNumber0 } from 'react-icons/tb';
+import {HiBackspace} from 'react-icons/hi';
+import {GiNuclearBomb} from 'react-icons/gi';
+// import{RiDivideLine} from 'react-icons/ri';
+// import{MdClear} from 'react-icons/md';
+import{FaTimes} from 'react-icons/fa';
+import{TiDivide, TiPlus, TiMinus, TiEquals} from 'react-icons/ti';
+import{BsDot} from 'react-icons/bs';
+import {IoMdColorPalette} from 'react-icons/io';
+
+const ButtonLine = ({pt, Sym1, Sym2, Sym3, Sym4, hideLastElement, stretchLastElement}) => {
+  const paddingTop = 'pt-' + pt;
+  let hidden;
+  hideLastElement ? hidden='text-black invisible' : hidden='text-black';
+  return (
+    <li class={paddingTop}>
+      <div class='flex justify-center items-center h-[50%] translate-y-32 flex-row'>
+        <ul>
+          <li>
+            <ul class='flex flex-row w-full'>
+              <li class='pr-6 text-black'><button class='w-[50px] h-[50px] bg-gray-300 shadow-2xl rounded-full text-3xl leading-none'><div class='w-full h-full flex justify-center items-center'>{Sym1}</div></button></li>
+              <li class='pr-6 text-black'><button class='w-[50px] h-[50px] bg-gray-300 shadow-2xl rounded-full text-3xl leading-none'><div class='w-full h-full flex justify-center items-center'>{Sym2}</div></button></li>
+              <li class='pr-6 text-black'><button class='w-[50px] h-[50px] bg-gray-300 shadow-2xl rounded-full text-3xl leading-none'><div class='w-full h-full flex justify-center items-center'>{Sym3}</div></button></li>
+              {stretchLastElement ? <li class={hidden}><button class='w-[50px] h-[124px] bg-gray-300 shadow-2xl rounded-full text-3xl leading-none -translate-y-[74px]'><div class='w-full h-full flex justify-center items-center'>{Sym4}</div></button></li> :
+              <li class={hidden}><button class='w-[50px] h-[50px] bg-gray-300 shadow-2xl rounded-full text-3xl leading-none'><div class='w-full h-full flex justify-center items-center'>{Sym4}</div></button></li>}
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </li>
+  );
+}
 
 export default function Home() {
   return (
@@ -11,24 +43,19 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <main class='bg-gray-900'>
         <div class='flex justify-center items-center h-screen'>
-          <div class='bg-zinc-700 h-[610px] w-[340px] rounded-2xl flex justify-center'>
+          <div class='bg-zinc-700 h-[573px] w-[340px] rounded-2xl flex justify-center'>
             <ul>
-              <li><div class='bg-black h-[100px] w-[275px] rounded-2xl shadow-2xl translate-y-11'></div></li>
-              <li>
-                <div class='flex justify-center items-center h-[50%] translate-y-32 flex-row'>
-                  <ul>
-                    <li>
-                      <ul class='flex flex-row w-full'>
-                        <li class='pr-6 text-3xl text-black'><button class='w-12 h-12 bg-gray-300 shadow-lg rounded-full'><p class='relative bottom-[4px]'>c</p></button></li>
-                        <li class='pr-6 text-3xl text-black'><button class='w-12 h-12 bg-gray-300 shadow-lg rounded-full'><p class='relative bottom-[3px]'>÷</p></button></li>
-                        <li class='pr-6 text-3xl text-black'><button class='w-12 h-12 bg-gray-300 shadow-lg rounded-full'><p class='relative bottom-[4px]'>x</p></button></li>
-                        <li class='text-3xl text-black'><button class='w-12 h-12 bg-gray-300 shadow-lg rounded-full'><p class='relative bottom-[4px]'>+</p></button></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
+              <li><div class='bg-neutral-900 h-[125px] w-[275px] rounded-2xl shadow-2xl translate-y-11'></div></li>
+              <li class='-translate-y-[60px]'>
+                <ul>
+                  <ButtonLine pt={0} Sym1={<GiNuclearBomb/>} Sym2={<TiDivide/>} Sym3={<FaTimes/>} Sym4={<TiPlus/>}/>
+                  <ButtonLine pt={6} Sym1={<TbNumber1/>} Sym2={<TbNumber2/>} Sym3={<TbNumber3/>} Sym4={<TiMinus/>}/>
+                  <ButtonLine pt={6} Sym1={<TbNumber4/>} Sym2={<TbNumber5/>} Sym3={<TbNumber6/>} Sym4={<BsDot/>}/>
+                  <ButtonLine pt={6} Sym1={<TbNumber7/>} Sym2={<TbNumber8/>} Sym3={<TbNumber9/>} Sym4={<TbNumber0/>} hideLastElement={true}/>
+                  <ButtonLine pt={6} Sym1={<IoMdColorPalette/>} Sym2={<TbNumber0/>} Sym3={<HiBackspace/>} Sym4={<TiEquals/>} stretchLastElement={true}/>
+                </ul>
               </li>
             </ul>
           </div>
