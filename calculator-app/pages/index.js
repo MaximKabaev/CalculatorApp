@@ -21,10 +21,10 @@ export default function Home() {
                   <ul>
                     <li>
                       <ul class='flex flex-row w-full'>
-                        <li class='pr-6 text-3xl text-black'><button class='w-12 h-12 bg-gray-300 shadow-lg rounded-full'><p class='inline'>c</p></button></li>
-                        <li class='pr-6 text-3xl text-black'><button class='w-12 h-12 bg-gray-300 shadow-lg rounded-full'>÷</button></li>
-                        <li class='pr-6 text-3xl text-black'><button class='w-12 h-12 bg-gray-300 shadow-lg rounded-full'>x</button></li>
-                        <li class='text-3xl text-black'><button class='w-12 h-12 bg-gray-300 shadow-lg rounded-full'>+</button></li>
+                        <li class='pr-6 text-3xl text-black'><button class='w-12 h-12 bg-gray-300 shadow-lg rounded-full'><p class='relative bottom-[4px]'>c</p></button></li>
+                        <li class='pr-6 text-3xl text-black'><button class='w-12 h-12 bg-gray-300 shadow-lg rounded-full'><p class='relative bottom-[3px]'>÷</p></button></li>
+                        <li class='pr-6 text-3xl text-black'><button class='w-12 h-12 bg-gray-300 shadow-lg rounded-full'><p class='relative bottom-[4px]'>x</p></button></li>
+                        <li class='text-3xl text-black'><button class='w-12 h-12 bg-gray-300 shadow-lg rounded-full'><p class='relative bottom-[4px]'>+</p></button></li>
                       </ul>
                     </li>
                   </ul>
