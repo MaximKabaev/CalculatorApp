@@ -1,2 +1,2 @@
 # CalculatorApp
-Cool calculator app
+Cool calculator app.
