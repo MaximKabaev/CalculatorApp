@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import ApplyPhysics from './physics.js';
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { TbNumber1, TbNumber2, TbNumber3, TbNumber4, TbNumber5, TbNumber6, TbNumber7, TbNumber8, TbNumber9, TbNumber0 } from 'react-icons/tb';
@@ -7,6 +8,8 @@ import {GiFireSpellCast, GiDiceFire} from 'react-icons/gi';
 import{FaTimes} from 'react-icons/fa';
 import{TiDivide, TiPlus, TiMinus, TiEquals} from 'react-icons/ti';
 import{BsDot} from 'react-icons/bs';
+
+import {evaluate, sqrt, round} from "mathjs";
 
 const ButtonLine = ({pt, Sym1, Sym2, Sym3, Sym4, hideLastElement, stretchLastElement, ids}) => {
   const liClass = 'flex justify-center items-center flex-row pt-' + pt;
@@ -72,7 +75,18 @@ function ButtonPress(id){
         RemoveInput(mainInput);
         return;
     }
+    else if(id === "="){
+        Calculate(currentValue);
+        // ApplyPhysics();
+        return;
+    }
   mainInput.value = currentValue + id;
+}
+
+function Calculate(input){
+    const mainInput = document.getElementById("mainInput");
+    const result = evaluate(input);
+    mainInput.value = result;
 }
 
 function RemoveInput(mainInput){
