@@ -66,6 +66,15 @@ export default function Home() {
 }
 
 function ButtonPress(id){
-  const currentValue = document.getElementById('mainInput').value;
-  document.getElementById("mainInput").value = currentValue + id;
+    const mainInput = document.getElementById("mainInput");
+  const currentValue = mainInput.value;
+    if(id === "C"){
+        RemoveInput(mainInput);
+        return;
+    }
+  mainInput.value = currentValue + id;
+}
+
+function RemoveInput(mainInput){
+    mainInput.value = "";
 }
