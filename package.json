@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "mathjs": "^11.1.0"
+    "mathjs": "^11.1.0",
+    "zustand": "^4.1.1"
   }
 }
