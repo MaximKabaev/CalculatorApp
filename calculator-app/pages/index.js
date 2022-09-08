@@ -22,7 +22,7 @@ const ButtonLine = ({pt, Sym1, Sym2, Sym3, Sym4, hideLastElement, stretchLastEle
   let hidden;
   hideLastElement ? hidden='text-black invisible' : hidden='text-black';
 
-    const { press } = useButtonPress();
+  const { press } = useButtonPress();
 
   return (
     <li class={liClass}>
@@ -81,18 +81,19 @@ export default function Home() {
 function useButtonPress() {
   const { input, setInput } = useInputStore();
 
-    const press = (id) => {    
-      
-        if (id === "C") {
-            setInput("");
-        } else if (id === "<-") {
-            setInput(input.slice(0, -1));
-        } else if (id === "=") {
-            setInput(evaluate(input));
-        } else {
-            setInput(input + id);
-        }
+  const press = (id) => {    
+    
+    if (id === "C") {
+      setInput("");
+    } else if (id === "<-") {
+      console.log(input, "vs", JSON.stringify(input), "vs", String(input));
+      setInput(String(input).slice(0, -1));
+    } else if (id === "=") {
+      setInput(evaluate(input));
+    } else {
+      setInput(input + id);
     }
+  }
 
 
   return {press}
