@@ -9,47 +9,25 @@ const Bodies = Matter.Bodies;
 
 var engine = Engine.create({});
 
-const spawnedNums = [];
-
-export const updateNums = (newNum) =>{
-  spawnedNums.push(newNum);
-}
-
-const spawnInfo = {
-  width: window.innerWidth / 2,
-  height: 75,
-  radius: 40
+if (typeof window === "undefined") {
+  console.log("`window` is not defined")
 }
 
 export const AddNum = (num) => {
-  // const {width, height, radius} = spawnInfo;
-  // console.log(num);
-  // const ball = Bodies.circle(width, height, radius, {
-  //   render: {
-  //     sprite: {
-  //       texture: createImage(num),
-  //     }
-  //   }
-  // });
-  // World.add(ball);
   World.add(engine.world, ball(num));
+}
 
-  // const {width, height, radius} = spawnInfo;
-  // console.log(num);
-  // const ball = Bodies.circle(width, height, radius, {
-  //   render: {
-  //     sprite: {
-  //       texture: createImage(num),
-  //     }
-  //   }
-  // });
-  // World.add(ball);
-  // World.add(engine.world, ball(num));
+var spawnInfo = {
+  xOffset: 65,
+  yOffset: 65,
+  radius: 40
 }
 
 var ball = function (num) {
-  const {width, height, radius} = spawnInfo;
-  return Bodies.circle(width, height, radius, {
+  const {xOffset, yOffset, radius} = spawnInfo;
+  xOffset = window.innerWidth/2;
+
+  return Bodies.circle(xOffset, yOffset, radius, {
     render: {
       sprite: {
         texture: createImage(num),
@@ -91,37 +69,7 @@ export const PhysicsMap = () => {
         render: {
           fillStyle: 'none'
         }
-      });
-
-    // console.log("CHECKING SPAWNED NUMS", spawnedNums);
-    // spawnedNums.forEach(num => {
-    //   console.log(num);
-    //   const ball = Bodies.circle(width, height, radius, {
-    //     render: {
-    //       sprite: {
-    //           texture: createImage(num),
-    //       }
-    //     }
-    //   });
-    //   World.add(ball);
-    // });
-
-    
-
-
-    // const wordBody = Bodies.rectangle(x, 50, 25, 25, {
-    //     restitution: 0.95,
-    //     friction: 0,
-    //     render: {
-    //      fillStyle: "#FFFFFF",
-    //      text: {
-    //       fillStyle: "#000000",
-    //       content: "1",
-    //       size: 50,
-    //      },
-    //    },
-    //   });
-
+    });
     World.add(engine.world, [calculatorBody, floor]);
 
     Engine.run(engine);
@@ -161,4 +109,8 @@ function createImage(string) {
     // ctx.strokeText("Canvas Rocks!", 5, 130);
 
     return drawing.toDataURL("image/png");
+}
+
+export function RemoveAll(){
+  World.clear(engine.world, ball);
 }

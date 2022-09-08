@@ -1,9 +1,6 @@
 import Head from 'next/head'
-import {PhysicsMap, AddNum} from './physics.js';
-import create from "zustand"
-import ApplyPhysics from './physics.js';
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import {PhysicsMap, AddNum, RemoveAll} from './physics.js';
+import create from "zustand";
 import { TbNumber1, TbNumber2, TbNumber3, TbNumber4, TbNumber5, TbNumber6, TbNumber7, TbNumber8, TbNumber9, TbNumber0 } from 'react-icons/tb';
 import {HiBackspace, HiFire} from 'react-icons/hi';
 import {GiFireSpellCast, GiDiceFire} from 'react-icons/gi';
@@ -90,6 +87,7 @@ function useButtonPress() {
   const press = (id) => {    
     
     if (id === "C") {
+      RemoveAll();
       setInput("");
     } else if (id === "<-") {
       console.log(input, "vs", JSON.stringify(input), "vs", String(input));
