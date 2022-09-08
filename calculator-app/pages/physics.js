@@ -1,23 +1,64 @@
-import { useEffect, useRef } from 'react'
-import { Engine, Render, Bodies, World } from 'matter-js'
+// MatterStepOne.js
+import React, { useEffect, useRef } from 'react';
+import Matter from 'matter-js';
+import create from "zustand"
 
-export default function ApplyPhysics(comp) {
-    let engine = Engine.create();
+const numbersToSpawn = [];
+
+export const PhysicsMap = () => {
+  const boxRef = useRef(null);
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    let Engine = Matter.Engine;
+    let Render = Matter.Render;
+    let World = Matter.World;
+    let Bodies = Matter.Bodies;
+
+    var x = window.innerWidth / 2;
+    var y = window.innerHeight / 2;
+
+    let engine = Engine.create({});
 
     let render = Render.create({
-        element: document.body,
-        engine: engine
+      element: boxRef.current,
+      engine: engine,
+      canvas: canvasRef.current,
+      options: {
+        width: x*2,
+        height: y*2,
+        background: 'none',
+        wireframes: false
+      }
     });
 
-    let boxA = Bodies.rectangle(400, 200, 80, 80);
-    let boxB = Bodies.rectangle(450, 50, 80, 80);
-    let ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+    const calculatorBody = Bodies.rectangle(x, y, 340, 573, {
+      isStatic: true,
+      render: {
+        fillStyle: 'none'
+      }
+    });
 
-    Composite.add(engine.world, [boxA, boxB, ground]);
+    const ball = Bodies.circle(x, 45, 10, {
+      restitution: 0.9,
+      render: {
+        fillStyle: 'yellow'
+      }
+    });
 
+    World.add(engine.world, [calculatorBody, ball]);
+
+    Engine.run(engine);
     Render.run(render);
+  }, []);
 
-    let runner = Runner.create();
-
-    Runner.run(runner, engine);
-}
+  return (
+    <div
+        id="body"
+        class="w-full h-full fixed"
+        ref={boxRef}
+    >
+      <canvas ref={canvasRef} />
+    </div>
+  );
+};
