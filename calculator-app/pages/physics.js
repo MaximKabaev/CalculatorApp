@@ -1,25 +1,70 @@
 // MatterStepOne.js
 import React, { useEffect, useRef } from 'react';
 import Matter from 'matter-js';
-import create from "zustand"
-import { FaBlackTie } from 'react-icons/fa';
 
-const numbersToSpawn = [];
+const Engine = Matter.Engine;
+const Render = Matter.Render;
+const World = Matter.World;
+const Bodies = Matter.Bodies;
+
+var engine = Engine.create({});
+
+const spawnedNums = [];
+
+export const updateNums = (newNum) =>{
+  spawnedNums.push(newNum);
+}
+
+const spawnInfo = {
+  width: window.innerWidth / 2,
+  height: 75,
+  radius: 40
+}
+
+export const AddNum = (num) => {
+  // const {width, height, radius} = spawnInfo;
+  // console.log(num);
+  // const ball = Bodies.circle(width, height, radius, {
+  //   render: {
+  //     sprite: {
+  //       texture: createImage(num),
+  //     }
+  //   }
+  // });
+  // World.add(ball);
+  World.add(engine.world, ball(num));
+
+  // const {width, height, radius} = spawnInfo;
+  // console.log(num);
+  // const ball = Bodies.circle(width, height, radius, {
+  //   render: {
+  //     sprite: {
+  //       texture: createImage(num),
+  //     }
+  //   }
+  // });
+  // World.add(ball);
+  // World.add(engine.world, ball(num));
+}
+
+var ball = function (num) {
+  const {width, height, radius} = spawnInfo;
+  return Bodies.circle(width, height, radius, {
+    render: {
+      sprite: {
+        texture: createImage(num),
+      }
+    }
+  });
+}
 
 export const PhysicsMap = () => {
   const boxRef = useRef(null);
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    let Engine = Matter.Engine;
-    let Render = Matter.Render;
-    let World = Matter.World;
-    let Bodies = Matter.Bodies;
-
     var x = window.innerWidth / 2;
     var y = window.innerHeight / 2;
-
-    let engine = Engine.create({});
 
     let render = Render.create({
       element: boxRef.current,
@@ -32,14 +77,6 @@ export const PhysicsMap = () => {
         wireframes: false
       }
     });
-
-    const spawnInfo = {
-        width: window.innerWidth / 2,
-        height: 100,
-        radius: 40
-    }
-
-    const {width, height, radius} = spawnInfo;
 
     const calculatorBody = Bodies.rectangle(x, y, 340, 573, {
       isStatic: true,
@@ -56,13 +93,20 @@ export const PhysicsMap = () => {
         }
       });
 
-    const ball = Bodies.circle(width, height, radius, {
-      render: {
-        sprite: {
-            texture: createImage("1"),
-        }
-      }
-    });
+    // console.log("CHECKING SPAWNED NUMS", spawnedNums);
+    // spawnedNums.forEach(num => {
+    //   console.log(num);
+    //   const ball = Bodies.circle(width, height, radius, {
+    //     render: {
+    //       sprite: {
+    //           texture: createImage(num),
+    //       }
+    //     }
+    //   });
+    //   World.add(ball);
+    // });
+
+    
 
 
     // const wordBody = Bodies.rectangle(x, 50, 25, 25, {
@@ -78,7 +122,7 @@ export const PhysicsMap = () => {
     //    },
     //   });
 
-    World.add(engine.world, [calculatorBody, ball, floor]);
+    World.add(engine.world, [calculatorBody, floor]);
 
     Engine.run(engine);
     Render.run(render);

@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import {PhysicsMap} from './physics.js';
+import {PhysicsMap, AddNum} from './physics.js';
 import create from "zustand"
 import ApplyPhysics from './physics.js';
 import Image from 'next/image'
@@ -37,6 +37,7 @@ const ButtonLine = ({pt, Sym1, Sym2, Sym3, Sym4, hideLastElement, stretchLastEle
     </li>
   );
 }
+
 
 export default function Home() {
   // return(
@@ -96,10 +97,10 @@ function useButtonPress() {
     } else if (id === "=") {
       setInput(evaluate(input));
     } else {
+      AddNum(id);
       setInput(input + id);
     }
   }
-
 
   return {press}
 }
