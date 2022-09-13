@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "babel-preset-react": "^6.24.1",
     "mathjs": "^11.1.0",
     "matter-js": "^0.18.0",

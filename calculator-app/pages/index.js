@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import colors from 'tailwindcss/colors'
 import {PhysicsMap, AddNum, RemoveAll} from './physics.js';
 import create from "zustand";
 import { TbNumber1, TbNumber2, TbNumber3, TbNumber4, TbNumber5, TbNumber6, TbNumber7, TbNumber8, TbNumber9, TbNumber0 } from 'react-icons/tb';
@@ -7,6 +8,8 @@ import {GiFireSpellCast, GiDiceFire} from 'react-icons/gi';
 import{FaTimes} from 'react-icons/fa';
 import{TiDivide, TiPlus, TiMinus, TiEquals} from 'react-icons/ti';
 import{BsDot} from 'react-icons/bs';
+
+import { FireOutlined, DeleteFilled } from '@ant-design/icons';
 
 import {evaluate} from "mathjs";
 
@@ -56,12 +59,12 @@ export default function Home() {
         <div class='flex justify-center items-center h-screen'>
           <div class='bg-zinc-700 h-[573px] w-[340px] rounded-2xl flex justify-center'>
             <ul>
-              <li class='absolute translate-y-14 translate-x-2 z-50'><button><HiFire class='w-6 h-6'/></button></li>
-              <input value={input} class="bg-black h-[100px] w-[275px] rounded-2xl shadow-[4px_4px_4px_rgba(0,0,0,0.25)] translate-y-11
+              <li class="absolute"><button class='absolute translate-y-[50px] translate-x-2 z-50'><FireOutlined/></button></li>
+              <input value={input} id="input" class="bg-black h-[100px] w-[275px] rounded-2xl shadow-[4px_4px_4px_rgba(0,0,0,0.25)] translate-y-11
               text-white outline-none text-right pt-12 pr-2 pl-2"/>
               <li class=''>
                 <ul className="h-[50%] translate-y-[68px]">
-                  <ButtonLine pt={0} Sym1={<GiFireSpellCast/>} Sym2={<TiDivide/>} Sym3={<FaTimes/>} Sym4={<TiPlus/>} id={["C", "/", "*", "+"]}/>
+                  <ButtonLine pt={0} Sym1={<DeleteFilled />} Sym2={<TiDivide/>} Sym3={<FaTimes/>} Sym4={<TiPlus/>} id={["C", "/", "*", "+"]}/>
                   <ButtonLine pt={6} Sym1={<TbNumber1/>} Sym2={<TbNumber2/>} Sym3={<TbNumber3/>} Sym4={<TiMinus/>} id={["1", "2", "3", "-"]}/>
                   <ButtonLine pt={6} Sym1={<TbNumber4/>} Sym2={<TbNumber5/>} Sym3={<TbNumber6/>} Sym4={<BsDot/>} id={["4", "5", "6", "."]}/>
                   <ButtonLine pt={6} Sym1={<TbNumber7/>} Sym2={<TbNumber8/>} Sym3={<TbNumber9/>} Sym4={<TbNumber0/>} hideLastElement={true} id={["7", "8", "9", ""]}/>
@@ -94,6 +97,8 @@ function useButtonPress() {
       setInput(String(input).slice(0, -1));
     } else if (id === "=") {
       setInput(evaluate(input));
+    } else if (id === "theme") {
+      createNewTheme()
     } else {
       AddNum(id);
       setInput(input + id);
@@ -102,3 +107,25 @@ function useButtonPress() {
 
   return {press}
 }
+
+const colorChoices = [colors.slate, colors.gray, colors.zinc, colors.neutral, colors.stone, colors.red, colors.orange, colors.amber, 
+colors.yellow, colors.lime, colors.green, colors.emerald, colors.teal, colors.cyan, colors.sky, colors.blue, colors.indigo, colors.violet,
+colors.purple, colors.fuchsia, colors.pink, colors.rose] 
+
+const themeElementsIds = ["input"]
+
+function createNewTheme () {
+  console.trace("createNewTheme")
+  const component = document.getElementById("input");
+  const randomColor = colorChoices[Math.floor(Math.random() * colorChoices.length)][Math.floor(Math.random() * (9) + 1)*100];
+  component.style.backgroundColor = randomColor;
+  console.log(randomColor)
+}
+
+// function GetAllColors(){
+//   let colors = []
+//   for(i = 50; i < 900; i++){
+//     colors.push(ColorChoices[i]);
+//   }
+//   const green = colors.green[600]
+// }

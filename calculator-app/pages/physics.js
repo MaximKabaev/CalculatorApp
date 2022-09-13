@@ -43,7 +43,6 @@ export const PhysicsMap = () => {
   useEffect(() => {
     var x = window.innerWidth / 2;
     var y = window.innerHeight / 2;
-
     let render = Render.create({
       element: boxRef.current,
       engine: engine,
@@ -56,6 +55,13 @@ export const PhysicsMap = () => {
       }
     });
 
+    const floor = Bodies.rectangle(x, y*2, x*2, 10, {
+      isStatic: true,
+      render: {
+        fillStyle: 'none'
+      }
+    });
+
     const calculatorBody = Bodies.rectangle(x, y, 340, 573, {
       isStatic: true,
       chamfer: 16,
@@ -64,12 +70,6 @@ export const PhysicsMap = () => {
       }
     });
 
-    const floor = Bodies.rectangle(x, y*2, x*2, 10, {
-        isStatic: true,
-        render: {
-          fillStyle: 'none'
-        }
-    });
     World.add(engine.world, [calculatorBody, floor]);
 
     Engine.run(engine);
