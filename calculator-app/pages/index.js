@@ -26,13 +26,13 @@ const ButtonLine = ({pt, Sym1, Sym2, Sym3, Sym4, hideLastElement, stretchLastEle
   const { press } = useButtonPress();
 
   return (
-    <li class={liClass}>
-      <ul class='flex flex-row w-full'>
-        <li class='pr-6 text-black'><button onClick={() => press(id[0])} class='w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div class='w-full h-full flex justify-center items-center'>{Sym1}</div></button></li>
-        <li class='pr-6 text-black'><button onClick={() => press(id[1])} class='w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div class='w-full h-full flex justify-center items-center'>{Sym2}</div></button></li>
-        <li class='pr-6 text-black'><button onClick={() => press(id[2])} class='w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div class='w-full h-full flex justify-center items-center'>{Sym3}</div></button></li>
-        {stretchLastElement ? <li class={hidden}><button onClick={() => press(id[3])} class='w-[50px] h-[124px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none -translate-y-[74px]'><div class='w-full h-full flex justify-center items-center'>{Sym4}</div></button></li> :
-        <li class={hidden}><button onClick={() => press(id[3])} class='w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div class='w-full h-full flex justify-center items-center'>{Sym4}</div></button></li>}
+    <li className={liClass}>
+      <ul className='flex flex-row w-full'>
+        <li className='pr-6 text-black'><button onClick={() => press(id[0])} className='w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym1}</div></button></li>
+        <li className='pr-6 text-black'><button onClick={() => press(id[1])} className='w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym2}</div></button></li>
+        <li className='pr-6 text-black'><button onClick={() => press(id[2])} className='w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym3}</div></button></li>
+        {stretchLastElement ? <li className={hidden}><button onClick={() => press(id[3])} className='w-[50px] h-[124px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none -translate-y-[74px]'><div className='w-full h-full flex justify-center items-center'>{Sym4}</div></button></li> :
+        <li className={hidden}><button onClick={() => press(id[3])} className='w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym4}</div></button></li>}
       </ul>
     </li>
   );
@@ -55,14 +55,14 @@ export default function Home() {
 
       <div className="hidden pt-6"/>
 
-      <main class='bg-gray-900 shadow-[4px_4px_4px_rgba(0,0,0,0.25)]'>
-        <div class='flex justify-center items-center h-screen'>
-          <div class='bg-zinc-700 h-[573px] w-[340px] rounded-2xl flex justify-center'>
+      <main className='bg-gray-900 shadow-[4px_4px_4px_rgba(0,0,0,0.25)]'>
+        <div className='flex justify-center items-center h-screen'>
+          <div className='bg-zinc-700 h-[573px] w-[340px] rounded-2xl flex justify-center'>
             <ul>
-              <li class="absolute"><button class='absolute translate-y-[50px] translate-x-2 z-50'><FireOutlined/></button></li>
-              <input value={input} id="input" class="bg-black h-[100px] w-[275px] rounded-2xl shadow-[4px_4px_4px_rgba(0,0,0,0.25)] translate-y-11
+              <li className="absolute"><button className='absolute translate-y-[50px] translate-x-2 z-50'><FireOutlined/></button></li>
+              <input value={input} id="input" className="bg-black h-[100px] w-[275px] rounded-2xl shadow-[4px_4px_4px_rgba(0,0,0,0.25)] translate-y-11
               text-white outline-none text-right pt-12 pr-2 pl-2"/>
-              <li class=''>
+              <li className=''>
                 <ul className="h-[50%] translate-y-[68px]">
                   <ButtonLine pt={0} Sym1={<DeleteFilled />} Sym2={<TiDivide/>} Sym3={<FaTimes/>} Sym4={<TiPlus/>} id={["C", "/", "*", "+"]}/>
                   <ButtonLine pt={6} Sym1={<TbNumber1/>} Sym2={<TbNumber2/>} Sym3={<TbNumber3/>} Sym4={<TiMinus/>} id={["1", "2", "3", "-"]}/>
