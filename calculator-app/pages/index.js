@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import colors from 'tailwindcss/colors'
-import {PhysicsMap, AddNum, RemoveAll} from './physics.js';
+import {PhysicsMap, AddNum, RemoveAll} from '../lib/physics.js';
 import create from "zustand";
 import { TbNumber1, TbNumber2, TbNumber3, TbNumber4, TbNumber5, TbNumber6, TbNumber7, TbNumber8, TbNumber9, TbNumber0 } from 'react-icons/tb';
 import {HiBackspace, HiFire} from 'react-icons/hi';
