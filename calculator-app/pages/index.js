@@ -13,6 +13,9 @@ import { FireOutlined, DeleteFilled } from '@ant-design/icons';
 
 import {evaluate} from "mathjs";
 
+let ballColor = '#393E46';
+let ballTextColor = '#FFFFFF';
+
 const useInputStore = create((set) => ({
     input: "",
     setInput: (input) => set({ input }),
@@ -55,7 +58,7 @@ export default function Home() {
 
       <div className="hidden pt-6"/>
 
-      <main className='bg-gray-900 shadow-[4px_4px_4px_rgba(0,0,0,0.25)]'>
+      <main className='bg-gray-900 shadow-[4px_4px_4px_rgba(0,0,0,0.25)]' id='bg'>
         <div className='flex justify-center items-center h-screen'>
           <div className='bg-zinc-700 h-[573px] w-[340px] rounded-2xl flex justify-center' id='mainBody'>
             <ul>
@@ -93,14 +96,13 @@ function useButtonPress() {
       RemoveAll();
       setInput("");
     } else if (id === "<-") {
-      console.log(input, "vs", JSON.stringify(input), "vs", String(input));
       setInput(String(input).slice(0, -1));
     } else if (id === "=") {
       setInput(evaluate(input));
     } else if (id === "theme") {
       createNewTheme()
     } else {
-      AddNum(id);
+      AddNum(id, ballColor, ballTextColor);
       setInput(input + id);
     }
   }
@@ -112,39 +114,62 @@ function useButtonPress() {
 // colors.yellow, colors.lime, colors.green, colors.emerald, colors.teal, colors.cyan, colors.sky, colors.blue, colors.indigo, colors.violet,
 // colors.purple, colors.fuchsia, colors.pink, colors.rose] 
 
-const colorSets = [["#004643", "#fffffe", "#f9bc60", true, true], 
-["#fef6e4", "#001858", "#f582ae", false, false], 
-["#55423d", "#fffffe", "#ffc0ad", true, true], 
-["#faeee7", "#33272a", "#ff8ba7", false, false], 
-["#fffffe", "#272343", "#ffd803", false, true], 
-["#0f0e17", "#fffffe", "#ff8906", true, false], 
-["#232946", "#fffffe", "#eebbc3", true, true], 
-["#f9f4ef", "#020826", "#8c7851", false, false], 
-["#eff0f3", "#0d0d0d", "#ff8e3c", false, false], 
-["#f8f5f2", "#232323", "#078080", false, false], 
-["#fec7d7", "#0e172c", "#fffffe", false, true],
-["#16161a", "#fffffe", "#7f5af0", true, false]] //bg, input, buttons 
+//true = white, false = black
+const colorSets = [
+  {bg: "#393E46", input: "#222831", body:"#00ADB5", ball: '#EEEEEE', button: '#EEEEEE', text: true, buttonText: false},
+  {bg: "#6A2C70", input: "#B83B5E", body:"#F08A5D", ball: "#F9ED69", button: "#F9ED69", text: true, buttonText: false},
+  {bg: "#3D8361", input: "#1C6758", body:"#D6CDA4", ball: "#EEF2E6", button: "#EEF2E6", text: true, buttonText: false},
+  {bg: "#0F3460", input: "#16213E", body:"#533483", ball: '#E94560', button: '#E94560', text: true, buttonText: false},
+  {bg: "#5F6F94", input: "#25316D", body:"#97D2EC", ball: "#FEF5AC", button: "#FEF5AC", text: true, buttonText: false},
+  {bg: "#367E18", input: "#FFE9A0", body:"#F57328", ball: "#CC3636", button: "#CC3636", text: false, buttonText: true},
+];
+
+// const colorSets = [["#004643", "#fffffe", "#f9bc60", true, true], 
+// ["#fef6e4", "#001858", "#f582ae", false, false], 
+// ["#55423d", "#fffffe", "#ffc0ad", true, true], 
+// ["#faeee7", "#33272a", "#ff8ba7", false, false], 
+// ["#fffffe", "#272343", "#ffd803", false, true], 
+// ["#0f0e17", "#fffffe", "#ff8906", true, false], 
+// ["#232946", "#fffffe", "#eebbc3", true, true], 
+// ["#f9f4ef", "#020826", "#8c7851", false, false], 
+// ["#eff0f3", "#0d0d0d", "#ff8e3c", false, false], 
+// ["#f8f5f2", "#232323", "#078080", false, false], 
+// ["#fec7d7", "#0e172c", "#fffffe", false, true],
+// ["#16161a", "#fffffe", "#7f5af0", true, false]] //bg, input, buttons 
 
 // let num = 0;
+
+let lastRandomNum = -1;
 
 function createNewTheme () {
   console.trace("createNewTheme")
   const fireElement = document.getElementById("fire");
   //randomizing the theme
-  const randomTheme = colorSets[Math.floor(Math.random() * colorSets.length)];
+  let randomNum = -1;
+
+  do{
+    randomNum = Math.floor(Math.random() * colorSets.length);
+  } while(randomNum == lastRandomNum);
+
+  lastRandomNum = randomNum;
+  const randomTheme = colorSets[randomNum];
+  
   // num = num + 1;
+  const bg = document.getElementById("bg");
+  bg.style.backgroundColor = randomTheme.bg;
+
   const mainBody = document.getElementById("mainBody");
-  mainBody.style.backgroundColor = randomTheme[0];
+  mainBody.style.backgroundColor = randomTheme.body;
 
   const input = document.getElementById("input");
-  input.style.backgroundColor = randomTheme[1];
+  input.style.backgroundColor = randomTheme.input;
 
   const buttons = document.getElementsByClassName("changeButtonColor");
   for (let i = 0; i < buttons.length; i++) {
-    buttons[i].style.backgroundColor = randomTheme[2];
+    buttons[i].style.backgroundColor = randomTheme.button;
   }
 
-  if(!randomTheme[3]) {
+  if(randomTheme.text) {
     input.style.color = "white";
     fireElement.style.color = "white";
   }
@@ -153,16 +178,20 @@ function createNewTheme () {
     fireElement.style.color = "black";
   }
 
-  if(!randomTheme[4]){
+  if(randomTheme.buttonText){
     for (let i = 0; i < buttons.length; i++) {
       buttons[i].style.color = "white";
     }
+    ballTextColor = '#FFFFFF';
   }
   else{
     for (let i = 0; i < buttons.length; i++) {
       buttons[i].style.color = "black";
     }
+    ballTextColor = '#000000';
   }
+
+  ballColor = randomTheme.ball;
 }
 
 // function GetAllColors(){
