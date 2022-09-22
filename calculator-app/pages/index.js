@@ -116,12 +116,13 @@ function useButtonPress() {
 
 //true = white, false = black
 const colorSets = [
-  {bg: "#393E46", input: "#222831", body:"#00ADB5", ball: '#EEEEEE', button: '#EEEEEE', text: true, buttonText: false},
-  {bg: "#6A2C70", input: "#B83B5E", body:"#F08A5D", ball: "#F9ED69", button: "#F9ED69", text: true, buttonText: false},
-  {bg: "#3D8361", input: "#1C6758", body:"#D6CDA4", ball: "#EEF2E6", button: "#EEF2E6", text: true, buttonText: false},
-  {bg: "#0F3460", input: "#16213E", body:"#533483", ball: '#E94560', button: '#E94560', text: true, buttonText: false},
-  {bg: "#5F6F94", input: "#25316D", body:"#97D2EC", ball: "#FEF5AC", button: "#FEF5AC", text: true, buttonText: false},
-  {bg: "#367E18", input: "#FFE9A0", body:"#F57328", ball: "#CC3636", button: "#CC3636", text: false, buttonText: true},
+  {bg: "#2b2d42", input: "#2b2d42", body:"#8d99ae", ball: '#edf2f4', button: '#edf2f4', text: true, buttonText: false}, 
+  {bg: "#283618", input: "#606c38", body:"#dda15e", ball: "#fefae0", button: "#fefae0", text: true, buttonText: false}, //
+  {bg: "#3D8361", input: "#1C6758", body:"#D6CDA4", ball: "#EEF2E6", button: "#EEF2E6", text: true, buttonText: false}, 
+  {bg: "#7868E6", input: "#EDEEF7", body:"#B8B5FF", ball: '#E4FBFF', button: '#E4FBFF', text: false, buttonText: false}, 
+  {bg: "#5F6F94", input: "#25316D", body:"#97D2EC", ball: "#FEF5AC", button: "#FEF5AC", text: true, buttonText: false}, 
+  {bg: "#222831", input: "#393E46", body:"#FFD369", ball: "#EEEEEE", button: "#EEEEEE", text: true, buttonText: false}, 
+  {bg: "#3b3b3b", input: "#3b3b3b", body:"#009063", ball: "#e3e0f3", button: "#e3e0f3", text: true, buttonText: false}
 ];
 
 // const colorSets = [["#004643", "#fffffe", "#f9bc60", true, true], 
@@ -137,7 +138,7 @@ const colorSets = [
 // ["#fec7d7", "#0e172c", "#fffffe", false, true],
 // ["#16161a", "#fffffe", "#7f5af0", true, false]] //bg, input, buttons 
 
-// let num = 0;
+// let num = -1;
 
 let lastRandomNum = -1;
 
@@ -148,7 +149,7 @@ function createNewTheme () {
   let randomNum = -1;
 
   do{
-    randomNum = Math.floor(Math.random() * colorSets.length);
+    randomNum = Math.floor(Math.random() * colorSets.length); //num++;//
   } while(randomNum == lastRandomNum);
 
   lastRandomNum = randomNum;
