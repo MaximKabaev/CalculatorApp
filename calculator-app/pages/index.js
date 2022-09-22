@@ -12,6 +12,7 @@ import{BsDot} from 'react-icons/bs';
 import { FireOutlined, DeleteFilled } from '@ant-design/icons';
 
 import {evaluate} from "mathjs";
+import { useEffect } from 'react';
 
 let ballColor = '#393E46';
 let ballTextColor = '#FFFFFF';
@@ -43,10 +44,36 @@ const ButtonLine = ({pt, Sym1, Sym2, Sym3, Sym4, hideLastElement, stretchLastEle
 
 
 export default function Home() {
-  // return(
-  //   <PhysicsMap/>
-  // );
-  const { input } = useInputStore();
+
+  useEffect(() => {
+    document.addEventListener('keydown', detectKeyDown, true);
+    document.addEventListener('click', inputClick, false);
+  }, []);
+
+  const { input, setInput} = useInputStore();
+  const detectKeyDown = (e) =>{
+    const currentInput = document.getElementById('input').value;
+    if(e.key == 'Backspace'){
+      setInput(String(currentInput).slice(0, -1));
+      return;
+    }
+    else if(e.key == "Enter" || e.key == 'Control' || e.key == 'Left Control'){
+      setInput(evaluate(currentInput));
+      return;
+    }
+    else if(e.key == 'Shift'){return;}
+    setInput(currentInput + e.key);
+  }
+
+  const inputClick = () => {
+    const input_ = document.getElementById('input');
+
+    const end = input_.value.length;
+  
+    input_.setSelectionRange(end, end);
+    input_.focus();
+  }
+
   return (
     <div>
       <PhysicsMap class='fixed'/>
@@ -64,7 +91,7 @@ export default function Home() {
             <ul>
               <li className="absolute"><button className='absolute translate-y-[50px] translate-x-2 z-50'><FireOutlined id="fire"/></button></li>
               <input value={input} id="input" className="bg-black h-[100px] w-[275px] rounded-2xl shadow-[4px_4px_4px_rgba(0,0,0,0.25)] translate-y-11
-              text-white outline-none text-right pt-12 pr-2 pl-2"/>
+              text-white outline-none text-right pt-12 pr-2 pl-2 caret-transparent"/>
               <li className=''>
                 <ul className="h-[50%] translate-y-[68px]">
                   <ButtonLine pt={0} Sym1={<DeleteFilled />} Sym2={<TiDivide/>} Sym3={<FaTimes/>} Sym4={<TiPlus/>} id={["C", "/", "*", "+"]}/>
@@ -90,6 +117,7 @@ export default function Home() {
 function useButtonPress() {
   const { input, setInput } = useInputStore();
 
+  // if(num != undefined) {setInput(num);}
   const press = (id) => {    
     
     if (id === "C") {
