@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 
 let ballColor = '#393E46';
 let ballTextColor = '#FFFFFF';
+let resultGiven = false
 
 const useInputStore = create((set) => ({
     input: "",
@@ -44,7 +45,7 @@ const ButtonLine = ({pt, Sym1, Sym2, Sym3, Sym4, hideLastElement, stretchLastEle
 
 
 export default function Home() {
-
+  const { press } = useButtonPress();
   useEffect(() => {
     document.addEventListener('keydown', detectKeyDown, true);
     document.addEventListener('click', inputClick, false);
@@ -52,17 +53,22 @@ export default function Home() {
 
   const { input, setInput} = useInputStore();
   const detectKeyDown = (e) =>{
-    const currentInput = document.getElementById('input').value;
-    if(e.key == 'Backspace'){
-      setInput(String(currentInput).slice(0, -1));
-      return;
-    }
-    else if(e.key == "Enter" || e.key == 'Control' || e.key == 'Left Control'){
-      setInput(evaluate(currentInput));
-      return;
-    }
-    else if(e.key == 'Shift'){return;}
-    setInput(currentInput + e.key);
+    press(e.key);
+    // const currentInput = document.getElementById('input').value;
+    // if(currentInput == "0"){
+    //   currentInput = "";
+    // }
+    // if(e.key == 'Backspace'){
+    //   setInput(String(currentInput).slice(0, -1));
+    //   return;
+    // }
+    // else if(e.key == "Enter" || e.key == '='){
+    //   setInput(evaluate(currentInput));
+    //   return;
+    // }
+    // else if(e.key == 'Shift' || e.key == 'Control' || e.key == 'Left Control'){return;}
+    // setInput(currentInput + e.key);
+    // AddNum(e.key, ballColor, ballTextColor);
   }
 
   const inputClick = () => {
@@ -115,17 +121,24 @@ export default function Home() {
 }
 
 function useButtonPress() {
-  const { input, setInput } = useInputStore();
+  const { setInput } = useInputStore();
+  
 
   // if(num != undefined) {setInput(num);}
   const press = (id) => {    
-    
+    if(id == 'Shift' || id == 'Control' || id == 'Left Control'){return;}
+    let input = document.getElementById('input').value;
+    if(resultGiven && input == "0"){
+      input = "";
+    }
+    resultGiven = false;
     if (id === "C") {
       RemoveAll();
       setInput("");
-    } else if (id === "<-") {
+    } else if (id === "<-" || id === "Backspace") {
       setInput(String(input).slice(0, -1));
-    } else if (id === "=") {
+    } else if (id === "=" || id === "Enter") {
+      resultGiven = true;
       setInput(evaluate(input));
     } else if (id === "theme") {
       createNewTheme()
