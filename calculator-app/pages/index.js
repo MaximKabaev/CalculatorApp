@@ -1,12 +1,15 @@
 import Head from 'next/head'
 import colors from 'tailwindcss/colors'
+
 import {PhysicsMap, AddNum, RemoveAll} from '../lib/physics.js';
+import {Extended} from './extend.js';
+
 import create from "zustand";
-import { TbNumber1, TbNumber2, TbNumber3, TbNumber4, TbNumber5, TbNumber6, TbNumber7, TbNumber8, TbNumber9, TbNumber0 } from 'react-icons/tb';
+import { TbNumber1, TbNumber2, TbNumber3, TbNumber4, TbNumber5, TbNumber6, TbNumber7, TbNumber8, TbNumber9, TbNumber0, TbLayoutSidebarRightExpand, TbLayoutSidebarLeftExpand } from 'react-icons/tb';
 import {HiBackspace, HiFire} from 'react-icons/hi';
 import {GiFireSpellCast, GiDiceFire} from 'react-icons/gi';
 import {GrClear} from 'react-icons/gr';
-import{FaTimes} from 'react-icons/fa';
+import{FaTimes, FaExpandArrowsAlt} from 'react-icons/fa';
 import{TiDivide, TiPlus, TiMinus, TiEquals} from 'react-icons/ti';
 import{BsDot, BsPaintBucket} from 'react-icons/bs';
 
@@ -17,7 +20,8 @@ import { useEffect } from 'react';
 
 let ballColor = '#393E46';
 let ballTextColor = '#FFFFFF';
-let resultGiven = false
+let resultGiven = false;
+let extendSwitch = true;
 
 const useInputStore = create((set) => ({
     input: "",
@@ -44,32 +48,23 @@ const ButtonLine = ({pt, Sym1, Sym2, Sym3, Sym4, hideLastElement, stretchLastEle
   );
 }
 
+let el = null;
 
 export default function Home() {
   const { press } = useButtonPress();
+  const {extend} = SwitchExtendMode();
   useEffect(() => {
     document.addEventListener('keydown', detectKeyDown, true);
     document.addEventListener('click', inputClick, false);
+    el = document.getElementById('extendElement');
+    console.log(el);
+    // const el = document.getElementById('container');
+    // console.log(el);
   }, []);
 
   const { input, setInput} = useInputStore();
   const detectKeyDown = (e) =>{
     press(e.key);
-    // const currentInput = document.getElementById('input').value;
-    // if(currentInput == "0"){
-    //   currentInput = "";
-    // }
-    // if(e.key == 'Backspace'){
-    //   setInput(String(currentInput).slice(0, -1));
-    //   return;
-    // }
-    // else if(e.key == "Enter" || e.key == '='){
-    //   setInput(evaluate(currentInput));
-    //   return;
-    // }
-    // else if(e.key == 'Shift' || e.key == 'Control' || e.key == 'Left Control'){return;}
-    // setInput(currentInput + e.key);
-    // AddNum(e.key, ballColor, ballTextColor);
   }
 
   const inputClick = () => {
@@ -96,7 +91,7 @@ export default function Home() {
         <div className='flex justify-center items-center h-screen'>
           <div className='bg-zinc-700 h-[573px] w-[340px] rounded-2xl flex justify-center' id='mainBody'>
             <ul>
-              <li className="absolute"><button className='absolute translate-y-[50px] translate-x-2 z-50'><FireOutlined id="fire"/></button></li>
+              <li className="absolute"><button className='absolute translate-y-[50px] translate-x-2 z-50' onClick={() => extend(el)}><TbLayoutSidebarRightExpand id="fire"/></button></li>
               <input value={input} id="input" className="bg-black h-[100px] w-[275px] rounded-2xl shadow-[4px_4px_4px_rgba(0,0,0,0.25)] translate-y-11
               text-white outline-none text-right pt-12 pr-2 pl-2 caret-transparent"/>
               <li className=''>
@@ -110,8 +105,9 @@ export default function Home() {
               </li>
             </ul>
           </div>
-          
         </div>
+        <div id="extendElement"><Extended /></div>
+        
       </main>
 
       <footer>
@@ -120,6 +116,26 @@ export default function Home() {
     </div>
   )
 }
+
+function SwitchExtendMode(){
+  const extend = (el) => {
+    extendSwitch = !extendSwitch;
+    console.log(el);
+    if(extendSwitch){
+      el.style.display = 'block';
+    }
+    else{
+      el.style.display = 'none';
+    }
+  }
+
+  return {extend};
+}
+
+// function GetEl(){
+//   const el = document.getElementById('extendElement');
+//   return el;
+// }
 
 function useButtonPress() {
   const { setInput } = useInputStore();
