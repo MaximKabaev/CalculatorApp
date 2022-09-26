@@ -5,9 +5,10 @@ import create from "zustand";
 import { TbNumber1, TbNumber2, TbNumber3, TbNumber4, TbNumber5, TbNumber6, TbNumber7, TbNumber8, TbNumber9, TbNumber0 } from 'react-icons/tb';
 import {HiBackspace, HiFire} from 'react-icons/hi';
 import {GiFireSpellCast, GiDiceFire} from 'react-icons/gi';
+import {GrClear} from 'react-icons/gr';
 import{FaTimes} from 'react-icons/fa';
 import{TiDivide, TiPlus, TiMinus, TiEquals} from 'react-icons/ti';
-import{BsDot} from 'react-icons/bs';
+import{BsDot, BsPaintBucket} from 'react-icons/bs';
 
 import { FireOutlined, DeleteFilled } from '@ant-design/icons';
 
@@ -100,11 +101,11 @@ export default function Home() {
               text-white outline-none text-right pt-12 pr-2 pl-2 caret-transparent"/>
               <li className=''>
                 <ul className="h-[50%] translate-y-[68px]">
-                  <ButtonLine pt={0} Sym1={<DeleteFilled />} Sym2={<TiDivide/>} Sym3={<FaTimes/>} Sym4={<TiPlus/>} id={["C", "/", "*", "+"]}/>
+                  <ButtonLine pt={0} Sym1={<GrClear />} Sym2={<TiDivide/>} Sym3={<FaTimes/>} Sym4={<TiPlus/>} id={["C", "/", "*", "+"]}/>
                   <ButtonLine pt={6} Sym1={<TbNumber1/>} Sym2={<TbNumber2/>} Sym3={<TbNumber3/>} Sym4={<TiMinus/>} id={["1", "2", "3", "-"]}/>
                   <ButtonLine pt={6} Sym1={<TbNumber4/>} Sym2={<TbNumber5/>} Sym3={<TbNumber6/>} Sym4={<BsDot/>} id={["4", "5", "6", "."]}/>
                   <ButtonLine pt={6} Sym1={<TbNumber7/>} Sym2={<TbNumber8/>} Sym3={<TbNumber9/>} Sym4={<TbNumber0/>} hideLastElement={true} id={["7", "8", "9", ""]}/>
-                  <ButtonLine pt={6} Sym1={<GiDiceFire/>} Sym2={<TbNumber0/>} Sym3={<HiBackspace/>} Sym4={<TiEquals/>} stretchLastElement={true} id={["theme", "0", "<-", "="]}/>
+                  <ButtonLine pt={6} Sym1={<BsPaintBucket/>} Sym2={<TbNumber0/>} Sym3={<HiBackspace/>} Sym4={<TiEquals/>} stretchLastElement={true} id={["theme", "0", "<-", "="]}/>
                 </ul>
               </li>
             </ul>
