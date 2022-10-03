@@ -31,6 +31,19 @@ var ball = function (num, color, textColor) {
   });
 }
 
+var extendWall = function (num, color, textColor) {
+  const {xOffset, yOffset, radius} = spawnInfo;
+  xOffset = window.innerWidth/2;
+  console.log(color);
+  return Bodies.circle(xOffset, yOffset, radius, {
+    render: {
+      sprite: {
+        texture: createImage(num, color, textColor)
+      }
+    }
+  });
+}
+
 export function PhysicsMap() {
   const boxRef = useRef(null);
   const canvasRef = useRef(null);

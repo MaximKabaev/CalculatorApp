@@ -21,34 +21,40 @@ import { useEffect } from 'react';
 let ballColor = '#393E46';
 let ballTextColor = '#FFFFFF';
 let resultGiven = false;
-let extendSwitch = true;
+let extendSwitch = false;
+
 
 const useInputStore = create((set) => ({
     input: "",
     setInput: (input) => set({ input }),
 }))
 
-const ButtonLine = ({pt, Sym1, Sym2, Sym3, Sym4, hideLastElement, stretchLastElement, id}) => {
+export const ButtonLine = ({pt, Sym1, Sym2, Sym3, Sym4, hideLastElement, stretchLastElement, id}) => {
   const liClass = 'flex justify-center items-center flex-row pt-' + pt;
   let hidden;
-  hideLastElement ? hidden='text-black invisible' : hidden='text-black';
+  hideLastElement ? hidden='pl-6 text-black invisible' : hidden='pl-6 text-black';
 
   const { press } = useButtonPress();
 
   return (
     <li className={liClass}>
       <ul className='flex flex-row w-full'>
-        <li className='pr-6 text-black'><button onClick={() => press(id[0])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym1}</div></button></li>
-        <li className='pr-6 text-black'><button onClick={() => press(id[1])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym2}</div></button></li>
-        <li className='pr-6 text-black'><button onClick={() => press(id[2])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym3}</div></button></li>
-        {stretchLastElement ? <li className={hidden}><button onClick={() => press(id[3])} className='changeButtonColor w-[50px] h-[124px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none -translate-y-[74px]'><div className='w-full h-full flex justify-center items-center'>{Sym4}</div></button></li> :
-        <li className={hidden}><button onClick={() => press(id[3])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym4}</div></button></li>}
+        <li className='text-black'><button onClick={() => press(id[0])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym1}</div></button></li>
+        <li className='pl-6 text-black'><button onClick={() => press(id[1])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym2}</div></button></li>
+        <li className='pl-6 text-black'><button onClick={() => press(id[2])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym3}</div></button></li>
+        {Sym4 ? 
+                  stretchLastElement ? <li className={hidden}><button onClick={() => press(id[3])} className='changeButtonColor w-[50px] h-[124px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none -translate-y-[74px]'><div className='w-full h-full flex justify-center items-center'>{Sym4}</div></button></li> :
+                  <li className={hidden}><button onClick={() => press(id[3])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym4}</div></button></li> : 
+        null}
+
       </ul>
     </li>
   );
 }
 
 let el = null;
+let extendXPos = 1000;
+let playedExtendAnim = false;
 
 export default function Home() {
   const { press } = useButtonPress();
@@ -89,14 +95,14 @@ export default function Home() {
 
       <main className='bg-gray-900 shadow-[4px_4px_4px_rgba(0,0,0,0.25)]' id='bg'>
         <div className='flex justify-center items-center h-screen'>
-          <div className='bg-zinc-700 h-[573px] w-[340px] rounded-2xl flex justify-center' id='mainBody'>
+          <div className='bg-zinc-700 h-[573px] w-[340px] rounded-2xl flex justify-center mainBody'>
             <ul>
               <li className="absolute"><button className='absolute translate-y-[50px] translate-x-2 z-50' onClick={() => extend(el)}><TbLayoutSidebarRightExpand id="fire"/></button></li>
               <input value={input} id="input" className="bg-black h-[100px] w-[275px] rounded-2xl shadow-[4px_4px_4px_rgba(0,0,0,0.25)] translate-y-11
               text-white outline-none text-right pt-12 pr-2 pl-2 caret-transparent"/>
               <li className=''>
                 <ul className="h-[50%] translate-y-[68px]">
-                  <ButtonLine pt={0} Sym1={<GrClear />} Sym2={<TiDivide/>} Sym3={<FaTimes/>} Sym4={<TiPlus/>} id={["C", "/", "*", "+"]}/>
+                  <ButtonLine pt={0} Sym1={<GrClear />} Sym2={<TiDivide/>} Sym3={<FaTimes/>} Sym4={<TiPlus/>} id={["C", "/", "×", "+"]}/>
                   <ButtonLine pt={6} Sym1={<TbNumber1/>} Sym2={<TbNumber2/>} Sym3={<TbNumber3/>} Sym4={<TiMinus/>} id={["1", "2", "3", "-"]}/>
                   <ButtonLine pt={6} Sym1={<TbNumber4/>} Sym2={<TbNumber5/>} Sym3={<TbNumber6/>} Sym4={<BsDot/>} id={["4", "5", "6", "."]}/>
                   <ButtonLine pt={6} Sym1={<TbNumber7/>} Sym2={<TbNumber8/>} Sym3={<TbNumber9/>} Sym4={<TbNumber0/>} hideLastElement={true} id={["7", "8", "9", ""]}/>
@@ -105,8 +111,10 @@ export default function Home() {
               </li>
             </ul>
           </div>
+          <div id="extendElement" class={'hidden fixed translate-y-[74px]'}>
+            <Extended/>
+          </div>
         </div>
-        <div id="extendElement"><Extended /></div>
         
       </main>
 
@@ -117,15 +125,27 @@ export default function Home() {
   )
 }
 
+//animation goes here...
+const waitTime = 1;
+function AnimateExtended(){
+  const el = document.getElementById('extendElement');
+  el.classList.add("translate-x-[290px]");
+  extendXPos = 290;
+}
+
 function SwitchExtendMode(){
   const extend = (el) => {
     extendSwitch = !extendSwitch;
-    console.log(el);
     if(extendSwitch){
-      el.style.display = 'block';
+      el.classList.add("hidden");
+      if(playedExtendAnim == false){
+        AnimateExtended();
+        playedExtendAnim = true;
+      }
     }
     else{
-      el.style.display = 'none';
+      playedExtendAnim = false;
+      el.classList.remove("hidden");
     }
   }
 
@@ -156,23 +176,43 @@ function useButtonPress() {
       setInput(String(input).slice(0, -1));
     } else if (id === "=" || id === "Enter") {
       resultGiven = true;
-      setInput(evaluate(input));
+      setInput(Calculate(input));
     } else if (id === "theme") {
       createNewTheme()
     } else {
-      AddNum(id, ballColor, ballTextColor);
-      setInput(input + id);
+      const filteredChar = FilterChar(id);
+      console.log(filteredChar);
+      setInput(input + filteredChar);
+      AddNum(filteredChar, ballColor, ballTextColor);
     }
   }
 
   return {press}
 }
 
-// const colorChoices = [colors.slate, colors.gray, colors.zinc, colors.neutral, colors.stone, colors.red, colors.orange, colors.amber, 
-// colors.yellow, colors.lime, colors.green, colors.emerald, colors.teal, colors.cyan, colors.sky, colors.blue, colors.indigo, colors.violet,
-// colors.purple, colors.fuchsia, colors.pink, colors.rose] 
+function FilterChar(char){
+  if (char === "*") {
+    char =  "×";
+  }
+  else if (char === "/") {
+    char = "÷";
+  }
+  return char;
+}
 
-//true = white, false = black
+function ReFilterText(input){
+  for (var i = 0; i < input.length; i++) {
+    const char = input.charAt(i);
+    if (char === "×") {
+      input = input.replace("×", "*");
+    }
+    else if (char === "÷") {
+      input = input.replace("÷", "/");
+    }
+  }
+  return input;
+}
+
 const colorSets = [
   {bg: "#2b2d42", input: "#2b2d42", body:"#8d99ae", ball: '#edf2f4', button: '#edf2f4', text: true, buttonText: false}, 
   {bg: "#283618", input: "#606c38", body:"#dda15e", ball: "#fefae0", button: "#fefae0", text: true, buttonText: false}, //
@@ -182,21 +222,6 @@ const colorSets = [
   {bg: "#222831", input: "#393E46", body:"#FFD369", ball: "#EEEEEE", button: "#EEEEEE", text: true, buttonText: false}, 
   {bg: "#3b3b3b", input: "#3b3b3b", body:"#009063", ball: "#e3e0f3", button: "#e3e0f3", text: true, buttonText: false}
 ];
-
-// const colorSets = [["#004643", "#fffffe", "#f9bc60", true, true], 
-// ["#fef6e4", "#001858", "#f582ae", false, false], 
-// ["#55423d", "#fffffe", "#ffc0ad", true, true], 
-// ["#faeee7", "#33272a", "#ff8ba7", false, false], 
-// ["#fffffe", "#272343", "#ffd803", false, true], 
-// ["#0f0e17", "#fffffe", "#ff8906", true, false], 
-// ["#232946", "#fffffe", "#eebbc3", true, true], 
-// ["#f9f4ef", "#020826", "#8c7851", false, false], 
-// ["#eff0f3", "#0d0d0d", "#ff8e3c", false, false], 
-// ["#f8f5f2", "#232323", "#078080", false, false], 
-// ["#fec7d7", "#0e172c", "#fffffe", false, true],
-// ["#16161a", "#fffffe", "#7f5af0", true, false]] //bg, input, buttons 
-
-// let num = -1;
 
 let lastRandomNum = -1;
 
@@ -217,8 +242,10 @@ function createNewTheme () {
   const bg = document.getElementById("bg");
   bg.style.backgroundColor = randomTheme.bg;
 
-  const mainBody = document.getElementById("mainBody");
-  mainBody.style.backgroundColor = randomTheme.body;
+  const mainBody = document.getElementsByClassName("mainBody");
+  for (let i = 0; i < mainBody.length; i++) {
+    mainBody[i].style.backgroundColor = randomTheme.body;
+  }
 
   const input = document.getElementById("input");
   input.style.backgroundColor = randomTheme.input;
@@ -253,10 +280,7 @@ function createNewTheme () {
   ballColor = randomTheme.ball;
 }
 
-// function GetAllColors(){
-//   let colors = []
-//   for(i = 50; i < 900; i++){
-//     colors.push(ColorChoices[i]);
-//   }
-//   const green = colors.green[600]
-// }
+function Calculate(text){
+  const result = evaluate(ReFilterText(text));
+  return result;
+}
