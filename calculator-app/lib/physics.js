@@ -12,26 +12,34 @@ export const AddNum = (num, color, textColor) => {
   World.add(engine.world, ball(num, color, textColor));
 }
 
+export const CreateExtendWall = () =>{
+  World.add(engine.world, extendWall());
+}
+
+export const RemoveExtendWall = () =>{
+  World.clear(engine.world, extendWall);
+}
+
 var spawnInfo = {
   xOffset: 65,
   yOffset: 65,
   radius: 40
 }
 
-var ball = function (num, color, textColor) {
-  const {xOffset, yOffset, radius} = spawnInfo;
-  xOffset = window.innerWidth/2;
-  console.log(color);
-  return Bodies.circle(xOffset, yOffset, radius, {
+var extendWall = function () {
+  const {xOffset, yOffset} = spawnInfo;
+  xOffset = window.innerWidth/2 + 290;
+  yOffset = window.innerHeight/2 + 74;
+  return Bodies.rectangle(xOffset, yOffset, 290, 425, {
+    isStatic: true,
+    chamfer: 16,
     render: {
-      sprite: {
-        texture: createImage(num, color, textColor)
-      }
+      fillStyle: 'black'
     }
   });
 }
 
-var extendWall = function (num, color, textColor) {
+var ball = function (num, color, textColor) {
   const {xOffset, yOffset, radius} = spawnInfo;
   xOffset = window.innerWidth/2;
   console.log(color);

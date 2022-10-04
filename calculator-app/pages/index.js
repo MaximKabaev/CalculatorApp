@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import colors from 'tailwindcss/colors'
 
-import {PhysicsMap, AddNum, RemoveAll} from '../lib/physics.js';
+import {PhysicsMap, AddNum, RemoveAll, CreateExtendWall, RemoveExtendWall} from '../lib/physics.js';
 import {Extended} from './extend.js';
 
 import create from "zustand";
@@ -23,6 +23,8 @@ let ballTextColor = '#FFFFFF';
 let resultGiven = false;
 let extendSwitch = false;
 
+let inverceMode = false;
+let inverceStartPos = -1;
 
 const useInputStore = create((set) => ({
     input: "",
@@ -111,7 +113,7 @@ export default function Home() {
               </li>
             </ul>
           </div>
-          <div id="extendElement" class={'hidden fixed translate-y-[74px]'}>
+          <div id="extendElement" class={'hidden fixed translate-y-[74px] translate-x-[290px]'}>
             <Extended/>
           </div>
         </div>
@@ -137,13 +139,15 @@ function SwitchExtendMode(){
   const extend = (el) => {
     extendSwitch = !extendSwitch;
     if(extendSwitch){
+      // CreateExtendWall();
       el.classList.add("hidden");
-      if(playedExtendAnim == false){
-        AnimateExtended();
-        playedExtendAnim = true;
-      }
+      // if(playedExtendAnim == false){
+      //   AnimateExtended();
+      //   playedExtendAnim = true;
+      // }
     }
     else{
+      // RemoveExtendWall();
       playedExtendAnim = false;
       el.classList.remove("hidden");
     }
@@ -179,25 +183,40 @@ function useButtonPress() {
       setInput(Calculate(input));
     } else if (id === "theme") {
       createNewTheme()
+    } else if(id==="inv"){
+      inverceMode = !inverceMode;
+      if(inverceMode){inverceStartPos=input.length-1;}
     } else {
-      const filteredChar = FilterChar(id);
+      const filteredChar = FilterText(id, input);
       console.log(filteredChar);
-      setInput(input + filteredChar);
-      AddNum(filteredChar, ballColor, ballTextColor);
+      setInput(filteredChar);
+      AddNum(id, ballColor, ballTextColor);
     }
   }
 
   return {press}
 }
 
-function FilterChar(char){
-  if (char === "*") {
-    char =  "×";
+function FilterText(id, input){
+  input = input + id;
+  for (var i = 0; i < input.length; i++) {
+    const char = input.charAt(i);
+    if (char === "*") {
+      input = input.replace("*", "×");
+    }
+    else if (char === "/") {
+      input = input.replace("/", "÷");
+    }
+    else if(i>= inverceStartPos && inverceMode == true && (char === "t" || char === "s" || char === "c")){
+      if(input.charAt(i+1) === "a" || input.charAt(i+1) === "i" || input.charAt(i+1) === "o"){
+        const startingText = input.slice(0, i);
+        const restOfTheText = input.slice(i, input.length);
+        input = startingText + "a" + restOfTheText;
+        i++;
+      }
+    }
   }
-  else if (char === "/") {
-    char = "÷";
-  }
-  return char;
+  return input;
 }
 
 function ReFilterText(input){
