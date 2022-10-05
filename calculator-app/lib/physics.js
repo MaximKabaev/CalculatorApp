@@ -3,21 +3,31 @@ import Matter from 'matter-js';
 
 const Engine = Matter.Engine;
 const Render = Matter.Render;
-const World = Matter.World;
+const Composite = Matter.Composite;
 const Bodies = Matter.Bodies;
+const Body = Matter.Body;
 
 var engine = Engine.create({});
 
 export const AddNum = (num, color, textColor) => {
-  World.add(engine.world, ball(num, color, textColor));
+  Composite.add(engine.world, ball(num, color, textColor));
 }
 
 export const CreateExtendWall = () =>{
-  World.add(engine.world, extendWall());
+  Composite.add(engine.world, extendWall());
+
 }
 
-export const RemoveExtendWall = () =>{
-  World.clear(engine.world, extendWall);
+export function RemoveExtendWall(){
+  engine.world.bodies.forEach((body)=>{
+    if(body.label == 'extendWall'){
+      Matter.Composite.remove(engine.world, body)
+    }
+  });
+}
+
+export function RemoveAll(){
+  Composite.clear(engine.world, ball);
 }
 
 var spawnInfo = {
@@ -32,9 +42,10 @@ var extendWall = function () {
   yOffset = window.innerHeight/2 + 74;
   return Bodies.rectangle(xOffset, yOffset, 290, 425, {
     isStatic: true,
+    label: "extendWall",
     chamfer: 16,
     render: {
-      fillStyle: 'black'
+      fillStyle: 'none'
     }
   });
 }
@@ -44,6 +55,7 @@ var ball = function (num, color, textColor) {
   xOffset = window.innerWidth/2;
   console.log(color);
   return Bodies.circle(xOffset, yOffset, radius, {
+    label: "ball",
     render: {
       sprite: {
         texture: createImage(num, color, textColor)
@@ -86,7 +98,7 @@ export function PhysicsMap() {
       }
     });
 
-    World.add(engine.world, [calculatorBody, floor]);
+    Composite.add(engine.world, [calculatorBody, floor]);
 
     Engine.run(engine);
     Render.run(render);
@@ -125,8 +137,4 @@ function createImage(string, color, textColor) {
     // ctx.strokeText("Canvas Rocks!", 5, 130);
 
     return drawing.toDataURL("image/png");
-}
-
-export function RemoveAll(){
-  World.clear(engine.world, ball);
 }

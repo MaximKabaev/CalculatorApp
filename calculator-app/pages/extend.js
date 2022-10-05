@@ -18,7 +18,7 @@ export function Extended(){
                 <ul>
                     <li className=''>
                         <ul className="h-[50%] translate-y-[37px]">
-                            <ButtonLine pt={0} Sym1={<TextObjcect{...texts[0]}/>} Sym2={<TextObjcect{...texts[1]}/>} Sym3={<TextObjcect{...texts[2]}/>} id={["inv", "sin(", "ln("]}/>
+                            <ButtonLine pt={0} Sym1={<TextObjcect{...texts[0]}/>} Sym2={<TextObjcect{...texts[1]}/>} Sym3={<TextObjcect{...texts[2]}/>} id={["⁻¹", "sin(", "ln("]}/>
                             <ButtonLine pt={6} Sym1={<TextObjcect{...texts[3]}/>} Sym2={<TextObjcect{...texts[4]}/>} Sym3={<TextObjcect{...texts[5]}/>} id={["cos(", "log(", "tan("]}/>
                             <ButtonLine pt={6} Sym1={<TextObjcect{...texts[6]}/>} Sym2={<TextObjcect{...texts[7]}/>} Sym3={<TextObjcect{...texts[8]}/>} id={["^", "!", "sqr("]}/>
                             <ButtonLine pt={6} Sym1={<TextObjcect{...texts[9]}/>} Sym2={<TextObjcect{...texts[10]}/>} Sym3={<TextObjcect{...texts[11]}/>} id={["(", ")", "%"]}/>

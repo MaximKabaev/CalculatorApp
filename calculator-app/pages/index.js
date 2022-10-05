@@ -23,8 +23,8 @@ let ballTextColor = '#FFFFFF';
 let resultGiven = false;
 let extendSwitch = false;
 
-let inverceMode = false;
-let inverceStartPos = -1;
+// let inverceMode = false;
+// let inverceStartPos = -1;
 
 const useInputStore = create((set) => ({
     input: "",
@@ -138,18 +138,20 @@ function AnimateExtended(){
 function SwitchExtendMode(){
   const extend = (el) => {
     extendSwitch = !extendSwitch;
+    console.trace(extendSwitch);
     if(extendSwitch){
-      // CreateExtendWall();
-      el.classList.add("hidden");
+      console.log("creating");
+      CreateExtendWall();
+      el.classList.remove("hidden");
       // if(playedExtendAnim == false){
       //   AnimateExtended();
       //   playedExtendAnim = true;
       // }
     }
     else{
-      // RemoveExtendWall();
-      playedExtendAnim = false;
-      el.classList.remove("hidden");
+      RemoveExtendWall();
+      // playedExtendAnim = false;
+      el.classList.add("hidden");
     }
   }
 
@@ -183,9 +185,9 @@ function useButtonPress() {
       setInput(Calculate(input));
     } else if (id === "theme") {
       createNewTheme()
-    } else if(id==="inv"){
-      inverceMode = !inverceMode;
-      if(inverceMode){inverceStartPos=input.length-1;}
+    // } else if(id==="inv"){
+    //   inverceMode = !inverceMode;
+    //   if(inverceMode){inverceStartPos=input.length-1;}
     } else {
       const filteredChar = FilterText(id, input);
       console.log(filteredChar);
@@ -207,13 +209,10 @@ function FilterText(id, input){
     else if (char === "/") {
       input = input.replace("/", "÷");
     }
-    else if(i>= inverceStartPos && inverceMode == true && (char === "t" || char === "s" || char === "c")){
-      if(input.charAt(i+1) === "a" || input.charAt(i+1) === "i" || input.charAt(i+1) === "o"){
-        const startingText = input.slice(0, i);
-        const restOfTheText = input.slice(i, input.length);
-        input = startingText + "a" + restOfTheText;
-        i++;
-      }
+    else if(input.charAt(i+1)==="⁻" && input.charAt(i+2)==="¹" && char === "("){
+      const startingText = input.slice(0, i);
+      const restOfTheText = input.slice(i+3, input.length);
+      input = startingText + "⁻¹(" + restOfTheText;
     }
   }
   return input;
@@ -227,6 +226,13 @@ function ReFilterText(input){
     }
     else if (char === "÷") {
       input = input.replace("÷", "/");
+    }
+    else if(input.charAt(i+1)==="¹" && input.charAt(i+2)==="(" && char === "⁻"){
+      const startingText = input.slice(0, i-3);
+      const trigText = input.slice(i-3, i);
+      const restOfTheText = input.slice(i+2, input.length);
+      input = startingText + "a" + trigText + restOfTheText;
+      console.log("HERE", input);
     }
   }
   return input;
