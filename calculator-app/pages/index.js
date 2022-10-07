@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import colors from 'tailwindcss/colors'
+import { motion, AnimatePresence} from "framer-motion";
 
 import {PhysicsMap, AddNum, RemoveAll, CreateExtendWall, RemoveExtendWall} from '../lib/physics.js';
 import {Extended} from './extend.js';
@@ -15,7 +16,7 @@ import{BsDot, BsPaintBucket} from 'react-icons/bs';
 
 import { FireOutlined, DeleteFilled } from '@ant-design/icons';
 
-import {evaluate} from "mathjs";
+import {evaluate, format} from "mathjs";
 import { useEffect } from 'react';
 
 let ballColor = '#393E46';
@@ -23,8 +24,16 @@ let ballTextColor = '#FFFFFF';
 let resultGiven = false;
 let extendSwitch = false;
 
+let showExtend = false;
+
 // let inverceMode = false;
 // let inverceStartPos = -1;
+
+const variants = {
+  hidden: { opacity: 0, x: -200, y: 0 },
+  enter: { opacity: 1, x: 0, y: 0 },
+  exit: { opacity: 0, x: 0, y: -100 },
+}
 
 const useInputStore = create((set) => ({
     input: "",
@@ -34,28 +43,27 @@ const useInputStore = create((set) => ({
 export const ButtonLine = ({pt, Sym1, Sym2, Sym3, Sym4, hideLastElement, stretchLastElement, id}) => {
   const liClass = 'flex justify-center items-center flex-row pt-' + pt;
   let hidden;
-  hideLastElement ? hidden='pl-6 text-black invisible' : hidden='pl-6 text-black';
+  // hideLastElement ? hidden='pl-6 text-black invisible' : hidden='pl-6 text-black';
 
   const { press } = useButtonPress();
 
   return (
     <li className={liClass}>
       <ul className='flex flex-row w-full'>
-        <li className='text-black'><button onClick={() => press(id[0])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym1}</div></button></li>
-        <li className='pl-6 text-black'><button onClick={() => press(id[1])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym2}</div></button></li>
-        <li className='pl-6 text-black'><button onClick={() => press(id[2])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym3}</div></button></li>
-        {Sym4 ? 
-                  stretchLastElement ? <li className={hidden}><button onClick={() => press(id[3])} className='changeButtonColor w-[50px] h-[124px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none -translate-y-[74px]'><div className='w-full h-full flex justify-center items-center'>{Sym4}</div></button></li> :
-                  <li className={hidden}><button onClick={() => press(id[3])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym4}</div></button></li> : 
+        <li className='text-black'><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => press(id[0])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym1}</div></motion.button></li>
+        <li className='pl-6 text-black'><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => press(id[1])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym2}</div></motion.button></li>
+        <li className='pl-6 text-black'><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => press(id[2])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym3}</div></motion.button></li>
+        {!hideLastElement ? 
+                  stretchLastElement ? 
+                  <li className="pl-6 text-black"><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => press(id[3])} className='changeButtonColor w-[50px] h-[124px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none -translate-y-[75px] fixed equal' style="transform: none;"><div className='w-full h-full flex justify-center items-center'>{Sym4}</div></motion.button></li> :
+                  <li className="pl-6 text-black"><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => press(id[3])} className='changeButtonColor w-[50px] h-[50px] bg-gray-300 shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-full text-3xl leading-none'><div className='w-full h-full flex justify-center items-center'>{Sym4}</div></motion.button></li> : 
         null}
-
       </ul>
     </li>
   );
 }
 
 let el = null;
-let extendXPos = 1000;
 let playedExtendAnim = false;
 
 export default function Home() {
@@ -68,6 +76,9 @@ export default function Home() {
     console.log(el);
     // const el = document.getElementById('container');
     // console.log(el);
+
+    const equalSign = document.getElementsByClassName('equal');
+    equalSign[0].style.transform = 'none';
   }, []);
 
   const { input, setInput} = useInputStore();
@@ -84,6 +95,7 @@ export default function Home() {
     input_.focus();
   }
 
+
   return (
     <div>
       <PhysicsMap class='fixed'/>
@@ -96,6 +108,14 @@ export default function Home() {
       <div className="hidden pt-6"/>
 
       <main className='bg-gray-900 shadow-[4px_4px_4px_rgba(0,0,0,0.25)]' id='bg'>
+      <motion.main
+      variants={variants} // Pass the variant object into Framer Motion 
+      initial="hidden" // Set the initial state to variants.hidden
+      animate="enter" // Animated state to variants.enter
+      exit="exit" // Exit state (used later) to variants.exit
+      transition={{ type: 'linear' }} // Set the transition to linear
+      className=""
+      >
         <div className='flex justify-center items-center h-screen'>
           <div className='bg-zinc-700 h-[573px] w-[340px] rounded-2xl flex justify-center mainBody'>
             <ul>
@@ -107,17 +127,17 @@ export default function Home() {
                   <ButtonLine pt={0} Sym1={<GrClear />} Sym2={<TiDivide/>} Sym3={<FaTimes/>} Sym4={<TiPlus/>} id={["C", "/", "×", "+"]}/>
                   <ButtonLine pt={6} Sym1={<TbNumber1/>} Sym2={<TbNumber2/>} Sym3={<TbNumber3/>} Sym4={<TiMinus/>} id={["1", "2", "3", "-"]}/>
                   <ButtonLine pt={6} Sym1={<TbNumber4/>} Sym2={<TbNumber5/>} Sym3={<TbNumber6/>} Sym4={<BsDot/>} id={["4", "5", "6", "."]}/>
-                  <ButtonLine pt={6} Sym1={<TbNumber7/>} Sym2={<TbNumber8/>} Sym3={<TbNumber9/>} Sym4={<TbNumber0/>} hideLastElement={true} id={["7", "8", "9", ""]}/>
-                  <ButtonLine pt={6} Sym1={<BsPaintBucket/>} Sym2={<TbNumber0/>} Sym3={<HiBackspace/>} Sym4={<TiEquals/>} stretchLastElement={true} id={["theme", "0", "<-", "="]}/>
+                  <ButtonLine pt={6} Sym1={<TbNumber7/>} Sym2={<TbNumber8/>} Sym3={<TbNumber9/>} Sym4={<TiEquals/>} stretchLastElement={true} id={["7", "8", "9", "="]}/>
+                  <ButtonLine pt={6} Sym1={<BsPaintBucket/>} Sym2={<TbNumber0/>} Sym3={<HiBackspace/>} Sym4={<TbNumber0/>} hideLastElement={true} id={["theme", "0", "<-", ""]}/>
                 </ul>
               </li>
             </ul>
           </div>
           <div id="extendElement" class={'hidden fixed translate-y-[74px] translate-x-[290px]'}>
-            <Extended/>
+            <AnimatePresence>{showExtend ? <Extended /> : null}</AnimatePresence>
           </div>
         </div>
-        
+      </motion.main>
       </main>
 
       <footer>
@@ -131,8 +151,7 @@ export default function Home() {
 const waitTime = 1;
 function AnimateExtended(){
   const el = document.getElementById('extendElement');
-  el.classList.add("translate-x-[290px]");
-  extendXPos = 290;
+  // el.classList.add("translate-x-[290px]");
 }
 
 function SwitchExtendMode(){
@@ -143,6 +162,7 @@ function SwitchExtendMode(){
       console.log("creating");
       CreateExtendWall();
       el.classList.remove("hidden");
+      showExtend = true;
       // if(playedExtendAnim == false){
       //   AnimateExtended();
       //   playedExtendAnim = true;
@@ -152,6 +172,7 @@ function SwitchExtendMode(){
       RemoveExtendWall();
       // playedExtendAnim = false;
       el.classList.add("hidden");
+      showExtend = false;
     }
   }
 
@@ -175,7 +196,7 @@ function useButtonPress() {
       input = "";
     }
     resultGiven = false;
-    if (id === "C") {
+    if (id === "C" || id === "Escape") {
       RemoveAll();
       setInput("");
     } else if (id === "<-" || id === "Backspace") {
@@ -306,6 +327,7 @@ function createNewTheme () {
 }
 
 function Calculate(text){
-  const result = evaluate(ReFilterText(text));
+  var result = evaluate(ReFilterText(text));
+  result = format(result, {precision: 14})
   return result;
 }
