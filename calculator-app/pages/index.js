@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import colors from 'tailwindcss/colors'
 import { motion, AnimatePresence} from "framer-motion";
+import ReactDOM from 'react-dom'
+
 
 import {PhysicsMap, AddNum, RemoveAll, CreateExtendWall, RemoveExtendWall} from '../lib/physics.js';
 import {Extended} from './extend.js';
@@ -17,14 +19,16 @@ import{BsDot, BsPaintBucket} from 'react-icons/bs';
 import { FireOutlined, DeleteFilled } from '@ant-design/icons';
 
 import {evaluate, format} from "mathjs";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 let ballColor = '#393E46';
 let ballTextColor = '#FFFFFF';
 let resultGiven = false;
 let extendSwitch = false;
 
-let showExtend = false;
+// let showExtend = false;
+
+// let showExtend = localStorage.getItem('showExtend');
 
 // let inverceMode = false;
 // let inverceStartPos = -1;
@@ -33,6 +37,12 @@ const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
   enter: { opacity: 1, x: 0, y: 0 },
   exit: { opacity: 0, x: 0, y: -100 },
+}
+
+const extendVariants = {
+  hidden: { opacity: 0, x: 1000, y: 0 },
+  enter: { opacity: 1, x: 0, y: 0 },
+  exit: { opacity: 0, x: 1000, y: 0 },
 }
 
 const useInputStore = create((set) => ({
@@ -67,8 +77,9 @@ let el = null;
 let playedExtendAnim = false;
 
 export default function Home() {
+  const [extendState, switcher] = useState(false)
   const { press } = useButtonPress();
-  const {extend} = SwitchExtendMode();
+  // const {extend} = SwitchExtendMode();
   useEffect(() => {
     document.addEventListener('keydown', detectKeyDown, true);
     document.addEventListener('click', inputClick, false);
@@ -79,6 +90,7 @@ export default function Home() {
 
     const equalSign = document.getElementsByClassName('equal');
     equalSign[0].style.transform = 'none';
+
   }, []);
 
   const { input, setInput} = useInputStore();
@@ -95,6 +107,16 @@ export default function Home() {
     input_.focus();
   }
 
+  function handleChange() {
+    switcher(!extendState);
+    if(extendState){RemoveExtendWall();}else{
+      CreateExtendWall();
+      const mainBody = document.getElementsByClassName("mainBody");
+      for (let i = 0; i < mainBody.length; i++) {
+        mainBody[i].style.backgroundColor = mainBody[0].style.backgroundColor;
+  }
+    }
+  }
 
   return (
     <div>
@@ -107,19 +129,19 @@ export default function Home() {
 
       <div className="hidden pt-6"/>
 
-      <main className='bg-gray-900 shadow-[4px_4px_4px_rgba(0,0,0,0.25)]' id='bg'>
+      <main className='bg-gray-900 shadow-[4px_4px_4px_rgba(0,0,0,0.25)] -z-50' id='bg'>
       <motion.main
-      variants={variants} // Pass the variant object into Framer Motion 
-      initial="hidden" // Set the initial state to variants.hidden
-      animate="enter" // Animated state to variants.enter
-      exit="exit" // Exit state (used later) to variants.exit
-      transition={{ type: 'linear' }} // Set the transition to linear
+      variants={variants}
+      initial="hidden"
+      animate="enter" 
+      exit="exit" 
+      transition={{ type: 'linear' }} 
       className=""
       >
         <div className='flex justify-center items-center h-screen'>
           <div className='bg-zinc-700 h-[573px] w-[340px] rounded-2xl flex justify-center mainBody'>
             <ul>
-              <li className="absolute"><button className='absolute translate-y-[50px] translate-x-2 z-50' onClick={() => extend(el)}><TbLayoutSidebarRightExpand id="fire"/></button></li>
+              <li className="absolute"><button className='absolute translate-y-[50px] translate-x-2 z-50' onClick={handleChange}><TbLayoutSidebarRightExpand id="fire"/></button></li>
               <input value={input} id="input" className="bg-black h-[100px] w-[275px] rounded-2xl shadow-[4px_4px_4px_rgba(0,0,0,0.25)] translate-y-11
               text-white outline-none text-right pt-12 pr-2 pl-2 caret-transparent"/>
               <li className=''>
@@ -133,10 +155,21 @@ export default function Home() {
               </li>
             </ul>
           </div>
-          <div id="extendElement" class={'hidden fixed translate-y-[74px] translate-x-[290px]'}>
-            <AnimatePresence>{showExtend ? <Extended /> : null}</AnimatePresence>
-          </div>
+          <div id="extendElement" className='fixed translate-y-[74px] translate-x-[290px]'>
+            <AnimatePresence>{extendState && 
+                <motion.main
+                variants={extendVariants} 
+                initial="hidden" 
+                animate="enter" 
+                exit="exit" 
+                transition={{ type: 'linear' }} 
+                className=""
+                >
+                  <Extended /> 
+                </motion.main>}
+            </AnimatePresence>
         </div>
+      </div>
       </motion.main>
       </main>
 
@@ -146,43 +179,6 @@ export default function Home() {
     </div>
   )
 }
-
-//animation goes here...
-const waitTime = 1;
-function AnimateExtended(){
-  const el = document.getElementById('extendElement');
-  // el.classList.add("translate-x-[290px]");
-}
-
-function SwitchExtendMode(){
-  const extend = (el) => {
-    extendSwitch = !extendSwitch;
-    console.trace(extendSwitch);
-    if(extendSwitch){
-      console.log("creating");
-      CreateExtendWall();
-      el.classList.remove("hidden");
-      showExtend = true;
-      // if(playedExtendAnim == false){
-      //   AnimateExtended();
-      //   playedExtendAnim = true;
-      // }
-    }
-    else{
-      RemoveExtendWall();
-      // playedExtendAnim = false;
-      el.classList.add("hidden");
-      showExtend = false;
-    }
-  }
-
-  return {extend};
-}
-
-// function GetEl(){
-//   const el = document.getElementById('extendElement');
-//   return el;
-// }
 
 function useButtonPress() {
   const { setInput } = useInputStore();
@@ -253,7 +249,13 @@ function ReFilterText(input){
       const trigText = input.slice(i-3, i);
       const restOfTheText = input.slice(i+2, input.length);
       input = startingText + "a" + trigText + restOfTheText;
-      console.log("HERE", input);
+    }
+    else if(input.charAt(i+1)==="¹" && char === "⁻"){
+      const startingText = input.slice(0, i-3);
+      const trigText = input.slice(i-3, i);
+      const restOfTheText = input.slice(i+2, input.length);
+      input = startingText + "^(-1)" + trigText + restOfTheText;
+      console.log(input);
     }
   }
   return input;
@@ -272,7 +274,6 @@ const colorSets = [
 let lastRandomNum = -1;
 
 function createNewTheme () {
-  console.trace("createNewTheme")
   const fireElement = document.getElementById("fire");
   //randomizing the theme
   let randomNum = -1;
