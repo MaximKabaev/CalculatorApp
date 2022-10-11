@@ -8,15 +8,12 @@ import {PhysicsMap, AddNum, RemoveAll, CreateExtendWall, RemoveExtendWall} from 
 import {Extended} from './extend.js';
 
 import create from "zustand";
-import { TbNumber1, TbNumber2, TbNumber3, TbNumber4, TbNumber5, TbNumber6, TbNumber7, TbNumber8, TbNumber9, TbNumber0, TbLayoutSidebarRightExpand, TbLayoutSidebarLeftExpand } from 'react-icons/tb';
+import { TbNumber1, TbNumber2, TbNumber3, TbNumber4, TbNumber5, TbNumber6, TbNumber7, TbNumber8, TbNumber9, TbNumber0, TbMath } from 'react-icons/tb';
 import {HiBackspace, HiFire} from 'react-icons/hi';
-import {GiFireSpellCast, GiDiceFire} from 'react-icons/gi';
 import {GrClear} from 'react-icons/gr';
 import{FaTimes, FaExpandArrowsAlt} from 'react-icons/fa';
 import{TiDivide, TiPlus, TiMinus, TiEquals} from 'react-icons/ti';
 import{BsDot, BsPaintBucket} from 'react-icons/bs';
-
-import { FireOutlined, DeleteFilled } from '@ant-design/icons';
 
 import {evaluate, format} from "mathjs";
 import { useEffect, useState } from 'react';
@@ -91,6 +88,9 @@ export default function Home() {
     const equalSign = document.getElementsByClassName('equal');
     equalSign[0].style.transform = 'none';
 
+    // const expandEl = document.getElementById('expand');
+    // expandEl.style.transform = 'none';
+    createNewTheme();
   }, []);
 
   const { input, setInput} = useInputStore();
@@ -111,10 +111,6 @@ export default function Home() {
     switcher(!extendState);
     if(extendState){RemoveExtendWall();}else{
       CreateExtendWall();
-      const mainBody = document.getElementsByClassName("mainBody");
-      for (let i = 0; i < mainBody.length; i++) {
-        mainBody[i].style.backgroundColor = mainBody[0].style.backgroundColor;
-  }
     }
   }
 
@@ -141,7 +137,7 @@ export default function Home() {
         <div className='flex justify-center items-center h-screen'>
           <div className='bg-zinc-700 h-[573px] w-[340px] rounded-2xl flex justify-center mainBody'>
             <ul>
-              <li className="absolute"><button className='absolute translate-y-[50px] translate-x-2 z-50' onClick={handleChange}><TbLayoutSidebarRightExpand id="fire"/></button></li>
+              <li className="absolute translate-y-[50px] translate-x-2 z-50"><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='absolute' onClick={handleChange}><TbMath id="expand" size={28}/></motion.button></li>
               <input value={input} id="input" className="bg-black h-[100px] w-[275px] rounded-2xl shadow-[4px_4px_4px_rgba(0,0,0,0.25)] translate-y-11
               text-white outline-none text-right pt-12 pr-2 pl-2 caret-transparent"/>
               <li className=''>
@@ -155,7 +151,7 @@ export default function Home() {
               </li>
             </ul>
           </div>
-          <div id="extendElement" className='fixed translate-y-[74px] translate-x-[290px]'>
+          <div id="extendElement" className='fixed translate-y-[73px] translate-x-[290px]'>
             <AnimatePresence>{extendState && 
                 <motion.main
                 variants={extendVariants} 
@@ -251,10 +247,9 @@ function ReFilterText(input){
       input = startingText + "a" + trigText + restOfTheText;
     }
     else if(input.charAt(i+1)==="¹" && char === "⁻"){
-      const startingText = input.slice(0, i-3);
-      const trigText = input.slice(i-3, i);
+      const startingText = input.slice(0, i);
       const restOfTheText = input.slice(i+2, input.length);
-      input = startingText + "^(-1)" + trigText + restOfTheText;
+      input = startingText + "^(-1)" + restOfTheText;
       console.log(input);
     }
   }
@@ -270,11 +265,11 @@ const colorSets = [
   {bg: "#222831", input: "#393E46", body:"#FFD369", ball: "#EEEEEE", button: "#EEEEEE", text: true, buttonText: false}, 
   {bg: "#3b3b3b", input: "#3b3b3b", body:"#009063", ball: "#e3e0f3", button: "#e3e0f3", text: true, buttonText: false}
 ];
-
+export let currentColorTheme = null;
 let lastRandomNum = -1;
 
 function createNewTheme () {
-  const fireElement = document.getElementById("fire");
+  const expandElement = document.getElementById("expand");
   //randomizing the theme
   let randomNum = -1;
 
@@ -284,7 +279,7 @@ function createNewTheme () {
 
   lastRandomNum = randomNum;
   const randomTheme = colorSets[randomNum];
-  
+  currentColorTheme = randomTheme;
   // num = num + 1;
   const bg = document.getElementById("bg");
   bg.style.backgroundColor = randomTheme.bg;
@@ -304,11 +299,11 @@ function createNewTheme () {
 
   if(randomTheme.text) {
     input.style.color = "white";
-    fireElement.style.color = "white";
+    expandElement.style.color = "white";
   }
   else{
     input.style.color = "black";
-    fireElement.style.color = "black";
+    expandElement.style.color = "black";
   }
 
   if(randomTheme.buttonText){
@@ -328,7 +323,9 @@ function createNewTheme () {
 }
 
 function Calculate(text){
-  var result = evaluate(ReFilterText(text));
-  result = format(result, {precision: 14})
-  return result;
+  try{ 
+    var result = evaluate(ReFilterText(text));
+    result = format(result, {precision: 14});
+    return result;
+  } catch(e) { return("SYNTAX ERROR"); }
 }

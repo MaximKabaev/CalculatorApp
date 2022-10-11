@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import {ButtonLine} from "./index.js";
+import {ButtonLine, currentColorTheme} from "./index.js";
 
 // {text:'x²'}, {text:'x³'}, {text:'xⁿ'},
 // {text:'x!'}, {text:'x√'}, {text:'x∛'},
@@ -12,9 +12,33 @@ export function Extended(){
         {text:'('}, {text:')'}, {text:'%'},
         {text:'π'}, {text:'e'}, {text:'Ans'}
     ]; 
+
+    useEffect(() => {
+        const mainBody = document.getElementsByClassName("mainBody");
+        for (let i = 0; i < mainBody.length; i++) {
+            mainBody[i].style.backgroundColor = currentColorTheme.body;
+        } 
+
+        const buttons = document.getElementsByClassName("changeButtonColor");
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].style.backgroundColor = currentColorTheme.button;
+        }
+
+        if(currentColorTheme.buttonText){
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].style.color = "white";
+            }
+            }
+            else{
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].style.color = "black";
+            }
+        }
+    }, []);
+
     return(
         <div className='flex justify-center items-center'>
-            <div className='bg-zinc-700 h-[425px] w-[290px] rounded-2xl flex justify-center mainBody'>
+            <div className='bg-zinc-700 h-[426px] w-[290px] rounded-r-2xl flex justify-center mainBody'>
                 <ul>
                     <li className=''>
                         <ul className="h-[50%] translate-y-[37px]">
