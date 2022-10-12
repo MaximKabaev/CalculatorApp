@@ -75,6 +75,9 @@ export default function Home() {
   const { press } = useButtonPress();
   // const {extend} = SwitchExtendMode();
   useEffect(() => {
+    const detectKeyDown = (e) =>{
+      press(e.key);
+    }
     document.addEventListener('keydown', detectKeyDown, true);
     document.addEventListener('click', inputClick, false);
     el = document.getElementById('extendElement');
@@ -88,12 +91,10 @@ export default function Home() {
     // const expandEl = document.getElementById('expand');
     // expandEl.style.transform = 'none';
     createNewTheme();
-  }, []);
+  }, [press]);
 
   const { input, setInput} = useInputStore();
-  const detectKeyDown = (e) =>{
-    press(e.key);
-  }
+
 
   const inputClick = () => {
     const input_ = document.getElementById('input');
