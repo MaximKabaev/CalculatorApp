@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "core-js": "^3.25.1",
-    "mathjs": "^11.1.0",
-    "zustand": "^4.1.1"
-  }
-}
