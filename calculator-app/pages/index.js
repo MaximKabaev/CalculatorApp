@@ -1,7 +1,5 @@
 import Head from 'next/head'
-import colors from 'tailwindcss/colors'
 import { motion, AnimatePresence} from "framer-motion";
-import ReactDOM from 'react-dom'
 
 
 import {PhysicsMap, AddNum, RemoveAll, CreateExtendWall, RemoveExtendWall} from '../lib/physics.js';
@@ -21,7 +19,6 @@ import { useEffect, useState } from 'react';
 let ballColor = '#393E46';
 let ballTextColor = '#FFFFFF';
 let resultGiven = false;
-let extendSwitch = false;
 
 // let showExtend = false;
 
