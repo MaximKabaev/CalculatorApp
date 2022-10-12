@@ -187,6 +187,9 @@ function useButtonPress() {
     if(resultGiven && input == "0"){
       input = "";
     }
+    else if(input == "SYNTAX ERROR"){
+      input="";
+    }
     resultGiven = false;
     if (id === "C" || id === "Escape") {
       RemoveAll();
