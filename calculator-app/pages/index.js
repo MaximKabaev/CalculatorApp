@@ -91,7 +91,7 @@ export default function Home() {
     // const expandEl = document.getElementById('expand');
     // expandEl.style.transform = 'none';
     createNewTheme();
-  }, [press]);
+  }, []);
 
   const { input, setInput} = useInputStore();
 
