@@ -40,7 +40,7 @@ var extendWall = function () {
   const {xOffset, yOffset} = spawnInfo;
   xOffset = window.innerWidth/2 + 290;
   yOffset = window.innerHeight/2 + 74;
-  return Bodies.rectangle(xOffset, yOffset, 290, 425, {
+  return Bodies.rectangle(xOffset, yOffset, 290, 412, {
     isStatic: true,
     label: "extendWall",
     chamfer: 16,
@@ -90,7 +90,7 @@ export function PhysicsMap() {
       }
     });
 
-    const calculatorBody = Bodies.rectangle(x, y, 340, 573, {
+    const calculatorBody = Bodies.rectangle(x, y, 340, 559, {
       isStatic: true,
       chamfer: 16,
       render: {

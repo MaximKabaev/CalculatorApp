@@ -7,9 +7,9 @@ import {Extended} from '../components/extend.js';
 
 import create from "zustand";
 import { TbNumber1, TbNumber2, TbNumber3, TbNumber4, TbNumber5, TbNumber6, TbNumber7, TbNumber8, TbNumber9, TbNumber0, TbMath } from 'react-icons/tb';
-import {HiBackspace, HiFire} from 'react-icons/hi';
+import {HiBackspace} from 'react-icons/hi';
 import {GrClear} from 'react-icons/gr';
-import{FaTimes, FaExpandArrowsAlt} from 'react-icons/fa';
+import{FaTimes} from 'react-icons/fa';
 import{TiDivide, TiPlus, TiMinus, TiEquals} from 'react-icons/ti';
 import{BsDot, BsPaintBucket} from 'react-icons/bs';
 
@@ -19,13 +19,6 @@ import { useEffect, useState } from 'react';
 let ballColor = '#393E46';
 let ballTextColor = '#FFFFFF';
 let resultGiven = false;
-
-// let showExtend = false;
-
-// let showExtend = localStorage.getItem('showExtend');
-
-// let inverceMode = false;
-// let inverceStartPos = -1;
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -68,7 +61,7 @@ export const ButtonLine = ({pt, Sym1, Sym2, Sym3, Sym4, hideLastElement, stretch
 }
 
 let el = null;
-let playedExtendAnim = false;
+let keyboardInputSwitch = false; //fixing a bug when detectKeyDown called twise upon the key press
 
 export default function Home() {
   const [extendState, switcher] = useState(false)
@@ -76,20 +69,22 @@ export default function Home() {
   // const {extend} = SwitchExtendMode();
   useEffect(() => {
     const detectKeyDown = (e) =>{
-      press(e.key);
+      if(keyboardInputSwitch){
+        keyboardInputSwitch = !keyboardInputSwitch
+        press(e.key);
+      }
+      else{
+        keyboardInputSwitch = !keyboardInputSwitch
+      }
     }
     document.addEventListener('keydown', detectKeyDown, true);
     document.addEventListener('click', inputClick, false);
     el = document.getElementById('extendElement');
     console.log(el);
-    // const el = document.getElementById('container');
-    // console.log(el);
 
     const equalSign = document.getElementsByClassName('equal');
     equalSign[0].style.transform = 'none';
 
-    // const expandEl = document.getElementById('expand');
-    // expandEl.style.transform = 'none';
     createNewTheme();
   }, []);
 
@@ -133,7 +128,7 @@ export default function Home() {
       className=""
       >
         <div className='flex justify-center items-center h-screen'>
-          <div className='bg-zinc-700 h-[573px] w-[340px] rounded-2xl flex justify-center mainBody'>
+          <div className='bg-zinc-700 h-[558px] w-[340px] rounded-2xl flex justify-center mainBody'>
             <ul>
               <li className="absolute translate-y-[50px] translate-x-2 z-50"><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='absolute' onClick={handleChange}><TbMath id="expand" size={28}/></motion.button></li>
               <input value={input} id="input" className="bg-black h-[100px] w-[275px] rounded-2xl shadow-[4px_4px_4px_rgba(0,0,0,0.25)] translate-y-11
@@ -176,16 +171,13 @@ export default function Home() {
 
 function useButtonPress() {
   const { setInput } = useInputStore();
-  
-
-  // if(num != undefined) {setInput(num);}
   const press = (id) => {    
     if(id == 'Shift' || id == 'Control' || id == 'Left Control'){return;}
     let input = document.getElementById('input').value;
     if(resultGiven && input == "0"){
       input = "";
     }
-    else if(input == "SYNTAX ERROR"){
+    else if(input == "SYNTAX ERROR" || input == "Infinite" || input=="Undefined"){
       input="";
     }
     resultGiven = false;
@@ -199,12 +191,8 @@ function useButtonPress() {
       setInput(Calculate(input));
     } else if (id === "theme") {
       createNewTheme()
-    // } else if(id==="inv"){
-    //   inverceMode = !inverceMode;
-    //   if(inverceMode){inverceStartPos=input.length-1;}
     } else {
       const filteredChar = FilterText(id, input);
-      console.log(filteredChar);
       setInput(filteredChar);
       AddNum(id, ballColor, ballTextColor);
     }
@@ -271,7 +259,6 @@ let lastRandomNum = -1;
 
 function createNewTheme () {
   const expandElement = document.getElementById("expand");
-  //randomizing the theme
   let randomNum = -1;
 
   do{
