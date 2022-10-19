@@ -15,6 +15,7 @@ import{BsDot, BsPaintBucket} from 'react-icons/bs';
 
 import {evaluate, format} from "mathjs";
 import { useEffect, useState } from 'react';
+import { isMobile } from 'react-device-detect';
 
 let ballColor = '#393E46';
 let ballTextColor = '#FFFFFF';
@@ -78,7 +79,9 @@ export default function Home() {
       }
     }
     document.addEventListener('keydown', detectKeyDown, true);
-    document.addEventListener('click', inputClick, false);
+    if(!isMobile){
+      document.addEventListener('click', inputClick, false);
+    }
     el = document.getElementById('extendElement');
     console.log(el);
 
@@ -97,7 +100,9 @@ export default function Home() {
     const end = input_.value.length;
   
     input_.setSelectionRange(end, end);
-    input_.focus();
+    if(!isMobile){
+      input_.focus();
+    }
   }
 
   function handleChange() {
