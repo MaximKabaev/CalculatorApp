@@ -135,7 +135,7 @@ export default function Home() {
         <div className='flex justify-center items-center h-screen'>
           <div className='bg-zinc-700 h-[558px] w-[340px] rounded-2xl flex justify-center mainBody'>
             <ul>
-              <li className="absolute translate-y-[50px] translate-x-2 z-50"><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='absolute' onClick={handleChange}><TbMath id="expand" size={28}/></motion.button></li>
+              {!isMobile ? <li className="absolute translate-y-[50px] translate-x-2 z-50"><motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className='absolute' onClick={handleChange}><TbMath id="expand" size={28}/></motion.button></li> : null}
               <input value={input} id="input" className="bg-black h-[100px] w-[275px] rounded-2xl shadow-[4px_4px_4px_rgba(0,0,0,0.25)] translate-y-11
               text-white outline-none text-right pt-12 pr-2 pl-2 caret-transparent"/>
               <li className=''>
@@ -199,7 +199,9 @@ function useButtonPress() {
     } else {
       const filteredChar = FilterText(id, input);
       setInput(filteredChar);
-      AddNum(id, ballColor, ballTextColor);
+      if(!isMobile){
+        AddNum(id, ballColor, ballTextColor);
+      }
     }
   }
 
