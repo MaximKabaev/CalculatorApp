@@ -78,12 +78,12 @@ export default function Home() {
         keyboardInputSwitch = !keyboardInputSwitch
       }
     }
-    document.addEventListener('keydown', detectKeyDown, true);
+    
     if(!isMobile){
+      document.addEventListener('keydown', detectKeyDown, true);
       document.addEventListener('click', inputClick, false);
+      el = document.getElementById('extendElement');
     }
-    el = document.getElementById('extendElement');
-    console.log(el);
 
     const equalSign = document.getElementsByClassName('equal');
     equalSign[0].style.transform = 'none';
@@ -294,11 +294,11 @@ function createNewTheme () {
 
   if(randomTheme.text) {
     input.style.color = "white";
-    expandElement.style.color = "white";
+    if(!isMobile){expandElement.style.color = "white";}
   }
   else{
     input.style.color = "black";
-    expandElement.style.color = "black";
+    if(!isMobile){expandElement.style.color = "black";}
   }
 
   if(randomTheme.buttonText){
